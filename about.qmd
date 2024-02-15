@@ -15,4 +15,4 @@ about:
       href: https://github.com
 
 ---
-This is a blog for my machine learning class!
+My name is Andre Xiao and this is a blog for my machine learning class!
