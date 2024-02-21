@@ -717,7 +717,10 @@ window.Quarto = {
 <pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Island_Biscoe', 'Island_Dream', 'Island_Torgersen'], 0.9961538461538462)</code></pre>
 </div>
 </div>
-<p>For logistic regression, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Island</code> with a mean cross-validation score of about <strong>99.6%</strong> accuracy. ### Random Forest Classifier</p>
+<p>For logistic regression, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Island</code> with a mean cross-validation score of about <strong>99.6%</strong> accuracy.</p>
+</section>
+<section id="random-forest-classifier" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest-classifier">Random Forest Classifier</h3>
 <div id="cell-17" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -731,7 +734,11 @@ window.Quarto = {
 <pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Sex_FEMALE', 'Sex_MALE'], 0.9883107088989442)</code></pre>
 </div>
 </div>
-<p>For the random forest classifier, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> with a mean cross-validation score of about <strong>98.8%</strong> accuracy. ### Decision Tree Classifier For the decision tree classifier, we must also find the optimal max depth. We test integer values for 5 to 50 and choose the best value.</p>
+<p>For the random forest classifier, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> with a mean cross-validation score of about <strong>98.8%</strong> accuracy.</p>
+</section>
+<section id="decision-tree-classifier" class="level3">
+<h3 class="anchored" data-anchor-id="decision-tree-classifier">Decision Tree Classifier</h3>
+<p>For the decision tree classifier, we must also find the optimal max depth. We test integer values for 5 to 50 and choose the best value.</p>
 <div id="cell-19" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -754,7 +761,10 @@ window.Quarto = {
 <pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Island_Biscoe', 'Island_Dream', 'Island_Torgersen'], 0.9765460030165913) 6</code></pre>
 </div>
 </div>
-<p>For the decision tree classifier, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> with a mean cross-validation score of about <strong>97.6%</strong> accuracy using <code>max_depth = 6</code>. ### Support Vector Machine</p>
+<p>For the decision tree classifier, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> with a mean cross-validation score of about <strong>97.6%</strong> accuracy using <code>max_depth = 6</code>.</p>
+</section>
+<section id="support-vector-machine" class="level3">
+<h3 class="anchored" data-anchor-id="support-vector-machine">Support Vector Machine</h3>
 <p>For the support vector machine, we must find the best gamma value. We test values from ranging from <span class="math inline">\(10^{-5}\)</span> to <span class="math inline">\(10^5\)</span>.</p>
 <div id="cell-22" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
@@ -797,7 +807,10 @@ window.Quarto = {
 <pre><code>0.99609375</code></pre>
 </div>
 </div>
-<p>So, using logistic regression on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Island</code> has a training accuracy of <strong>&gt;99.6%</strong>. ### Random Forest Classifier</p>
+<p>So, using logistic regression on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Island</code> has a training accuracy of <strong>&gt;99.6%</strong>.</p>
+</section>
+<section id="random-forest-classifier-1" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest-classifier-1">Random Forest Classifier</h3>
 <div id="cell-26" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cols_RFC <span class="op">=</span> best_score_RFC[<span class="dv">0</span>]</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>RFC.fit(X_train[cols_RFC], y_train)</span>
@@ -808,8 +821,8 @@ window.Quarto = {
 </div>
 <p>So, using the random forest classifier on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>100%</strong>.</p>
 </section>
-<section id="decision-tree-classifier" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier">Decision Tree Classifier</h3>
+<section id="decision-tree-classifier-1" class="level3">
+<h3 class="anchored" data-anchor-id="decision-tree-classifier-1">Decision Tree Classifier</h3>
 <div id="cell-28" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cols_DTC <span class="op">=</span> best_score_DTC[<span class="dv">0</span>]</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>DTC <span class="op">=</span> DecisionTreeClassifier(max_depth <span class="op">=</span> best_d)</span>
@@ -819,7 +832,10 @@ window.Quarto = {
 <pre><code>1.0</code></pre>
 </div>
 </div>
-<p>So, using the decision tree classifier on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>98.8%</strong>. ### Support Vector Machine</p>
+<p>So, using the decision tree classifier on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>98.8%</strong>.</p>
+</section>
+<section id="support-vector-machine-1" class="level3">
+<h3 class="anchored" data-anchor-id="support-vector-machine-1">Support Vector Machine</h3>
 <div id="cell-30" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cols_SVM <span class="op">=</span> best_score_SVM[<span class="dv">0</span>]</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>SVM <span class="op">=</span> SVC(gamma <span class="op">=</span> best_g)</span>
@@ -829,7 +845,13 @@ window.Quarto = {
 <pre><code>0.9921875</code></pre>
 </div>
 </div>
-<p>So, using the support vector machine on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>&gt;99.2%</strong>. ## Plotting Training Decision Regions ### Logisitic Regression</p>
+<p>So, using the support vector machine on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>&gt;99.2%</strong>.</p>
+</section>
+</section>
+<section id="plotting-training-decision-regions" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-training-decision-regions">Plotting Training Decision Regions</h2>
+<section id="logisitic-regression" class="level3">
+<h3 class="anchored" data-anchor-id="logisitic-regression">Logisitic Regression</h3>
 <div id="cell-32" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plot_regions(LR, X_train[cols_LR], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -854,8 +876,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="decision-tree-classifier-1" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier-1">Decision Tree Classifier</h3>
+<section id="decision-tree-classifier-2" class="level3">
+<h3 class="anchored" data-anchor-id="decision-tree-classifier-2">Decision Tree Classifier</h3>
 <div id="cell-36" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>plot_regions(DTC, X_train[cols_DTC], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -867,8 +889,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="support-vector-machine" class="level3">
-<h3 class="anchored" data-anchor-id="support-vector-machine">Support Vector Machine</h3>
+<section id="support-vector-machine-2" class="level3">
+<h3 class="anchored" data-anchor-id="support-vector-machine-2">Support Vector Machine</h3>
 <div id="cell-38" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plot_regions(SVM, X_train[cols_SVM], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -900,30 +922,40 @@ window.Quarto = {
 </div>
 <p>Logistic regression has a test score of <strong>100%</strong>! We have accomplished our objective, but let’s also look at the other models.</p>
 </section>
-<section id="random-forest-classifier" class="level3">
-<h3 class="anchored" data-anchor-id="random-forest-classifier">Random Forest Classifier</h3>
+<section id="random-forest-classifier-2" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest-classifier-2">Random Forest Classifier</h3>
 <div id="cell-44" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>RFC.score(X_test[cols_RFC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="54">
 <pre><code>0.9852941176470589</code></pre>
 </div>
 </div>
-<p>The random forest classifier has a test score of about <strong>99.5%</strong>. ### Decision Tree Classifier</p>
+<p>The random forest classifier has a test score of about <strong>99.5%</strong>.</p>
+</section>
+<section id="decision-tree-classifier-3" class="level3">
+<h3 class="anchored" data-anchor-id="decision-tree-classifier-3">Decision Tree Classifier</h3>
 <div id="cell-46" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>DTC.score(X_test[cols_DTC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="55">
 <pre><code>0.9852941176470589</code></pre>
 </div>
 </div>
-<p>The decision tree classifier has a test score of about <strong>98.5%</strong> as well. ### Support Vector Machine Classifier</p>
+<p>The decision tree classifier has a test score of about <strong>98.5%</strong> as well.</p>
+</section>
+<section id="support-vector-machine-classifier" class="level3">
+<h3 class="anchored" data-anchor-id="support-vector-machine-classifier">Support Vector Machine Classifier</h3>
 <div id="cell-48" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>SVM.score(X_test[cols_SVM], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>0.9852941176470589</code></pre>
 </div>
 </div>
-<p>The support vector machine also has a test score of about <strong>98.5%</strong>. ## Plotting Testing Decision Regions Below are the decision regions on test data for each model.</p>
+<p>The support vector machine also has a test score of about <strong>98.5%</strong>.</p>
 </section>
+</section>
+<section id="plotting-testing-decision-regions" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-testing-decision-regions">Plotting Testing Decision Regions</h2>
+<p>Below are the decision regions on test data for each model.</p>
 <section id="logistic-regression-3" class="level3">
 <h3 class="anchored" data-anchor-id="logistic-regression-3">Logistic Regression</h3>
 <div id="cell-51" class="cell" data-execution_count="57">
@@ -937,8 +969,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="random-forest-classifier-1" class="level3">
-<h3 class="anchored" data-anchor-id="random-forest-classifier-1">Random Forest Classifier</h3>
+<section id="random-forest-classifier-3" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest-classifier-3">Random Forest Classifier</h3>
 <div id="cell-53" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>plot_regions(RFC, X_test[cols_RFC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -950,8 +982,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="decision-tree-classifier-2" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier-2">Decision Tree Classifier</h3>
+<section id="decision-tree-classifier-4" class="level3">
+<h3 class="anchored" data-anchor-id="decision-tree-classifier-4">Decision Tree Classifier</h3>
 <div id="cell-55" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>plot_regions(DTC, X_test[cols_DTC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -963,8 +995,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="support-vector-machine-1" class="level3">
-<h3 class="anchored" data-anchor-id="support-vector-machine-1">Support Vector Machine</h3>
+<section id="support-vector-machine-3" class="level3">
+<h3 class="anchored" data-anchor-id="support-vector-machine-3">Support Vector Machine</h3>
 <div id="cell-57" class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>plot_regions(SVM, X_test[cols_SVM], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
