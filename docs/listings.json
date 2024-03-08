@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/replication_post/bias_replication_post.html",
       "/posts/loans_post/loans.html",
       "/posts/penguins_post/penguins.html",
       "/posts/example-blog-post/index.html"
