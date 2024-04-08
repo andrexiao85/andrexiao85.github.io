@@ -67,7 +67,7 @@
     "href": "posts/perceptron_post/perceptron_post.html",
     "title": "Perceptron",
     "section": "",
-    "text": "Image source: https://miro.medium.com/v2/resize:fit:1400/1*b7kNF1-TcrcogZAh2i5l4Q.png"
+    "text": "Image source: https://miro.medium.com/v2/resize:fit:1400/1*b7kNF1-TcrcogZAh2i5l4Q.png\nPerceptron Implementation: perceptron.py"
   },
   {
     "objectID": "posts/perceptron_post/perceptron_post.html#abstract",
