@@ -2,7 +2,6 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/perceptron_post/perceptron.html",
       "/posts/replication_post/bias_replication_post.html",
       "/posts/loans_post/loans.html",
       "/posts/penguins_post/penguins.html"
