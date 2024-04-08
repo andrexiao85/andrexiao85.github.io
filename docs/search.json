@@ -63,20 +63,6 @@
     "text": "Summary\nIn this study, I built an automated decision-making system for loans. I optimized the predicted expected profit per loan for the bank by giving each prospective borrower a score(Equation 1) and then choosing a threshold to determine the borrowers that would receive a loan. Afterwards, I analyzed my model for biases by age group, loan intents, and income level.\nBy using the features loan_int_rate, loan_percent_income, int_percent_income, and person_home_ownership, the model produced an expected ouput of about $1714.51. This surpasses the base profit by about $895.39, an approximately 209% increase in profit.\nFurthermore, analysis of my model showed that it approves fewer loans to prospective borrowers over the age of 60, borrowers who intend to take a loan for education and venture, and borrowers with lower income. I also specifically analyzed the impact my model had on borrowers who are intending to take a loan out for medical reasons and found that there was a slight, but not a significant drop in loans approved. Lastly, I discussed why my model would’ve been unfair for borrowers looking to receive a medical loan if my model had a bias against them."
   },
   {
-    "objectID": "posts/example-blog-post/index.html",
-    "href": "posts/example-blog-post/index.html",
-    "title": "Hello Blog",
-    "section": "",
-    "text": "from source import Perceptron\nThis is an example of the blog posts that you’ll submit as your primary form of learning demonstration in CSCI 0451. I created this post by modifying the file posts/example-blog-post/index.ipynb in VSCode. You can also use JupyterLab for this editing if you prefer. Finally, it is possible to write blog posts without using notebooks by writing .qmd files, as illustrated here."
-  },
-  {
-    "objectID": "posts/example-blog-post/index.html#math",
-    "href": "posts/example-blog-post/index.html#math",
-    "title": "Hello Blog",
-    "section": "Math",
-    "text": "Math\nIn addition to regular text using the Markdown specification, you can also write mathematics, enclosed between dollar signs. The syntax for writing math is very similar to the syntax used in the \\(\\LaTeX\\) markup language. For example, $f(x) \\approx y$ renders to \\(f(x) \\approx y\\). To place complex mathematical expressions on their own lines, use double dollar signs. For example, the expression\n$$\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2$$\nrenders to:\n\\[\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2\\;.\\]\nBehind the scenes, math is powered by the MathJax engine. For more on how to write math, check this handy tutorial and quick reference."
-  },
-  {
     "objectID": "posts/penguins_post/penguins.html",
     "href": "posts/penguins_post/penguins.html",
     "title": "Palmer Penguins",
@@ -186,6 +172,6 @@
     "href": "index.html",
     "title": "CSCI 0451 Machine Learning",
     "section": "",
-    "text": "Replication Study: Racial Bias in Health Algorithms\n\n\n\n\n\nA replication study of “Dissecting racial bias in an algorithm used to manage the health of populations” by Ziad Obermeyer, Brian Powers, Christine Vogeli, and Sendhil Mullainathan.\n\n\n\n\n\nMar 7, 2024\n\n\nAndre Xiao\n\n\n\n\n\n\n\n\n\n\n\n\nBank Loans\n\n\n\n\n\nOptimizing and assessing the impact of an automated decision system for bank loans.\n\n\n\n\n\nMar 3, 2024\n\n\nAndre Xiao\n\n\n\n\n\n\n\n\n\n\n\n\nPalmer Penguins\n\n\n\n\n\nPredicting penguin species from the Palmer Archipelago.\n\n\n\n\n\nFeb 21, 2024\n\n\nAndre Xiao\n\n\n\n\n\n\n\n\n\n\n\n\nHello Blog\n\n\n\n\n\nAn example blog post illustrating the key techniques you’ll need to demonstrate your learning in CSCI 0451.\n\n\n\n\n\nJan 10, 2023\n\n\nPhil Chodrow\n\n\n\n\n\n\nNo matching items"
+    "text": "Replication Study: Racial Bias in Health Algorithms\n\n\n\n\n\nA replication study of “Dissecting racial bias in an algorithm used to manage the health of populations” by Ziad Obermeyer, Brian Powers, Christine Vogeli, and Sendhil Mullainathan.\n\n\n\n\n\nMar 7, 2024\n\n\nAndre Xiao\n\n\n\n\n\n\n\n\n\n\n\n\nBank Loans\n\n\n\n\n\nOptimizing and assessing the impact of an automated decision system for bank loans.\n\n\n\n\n\nMar 3, 2024\n\n\nAndre Xiao\n\n\n\n\n\n\n\n\n\n\n\n\nPalmer Penguins\n\n\n\n\n\nPredicting penguin species from the Palmer Archipelago.\n\n\n\n\n\nFeb 21, 2024\n\n\nAndre Xiao\n\n\n\n\n\n\nNo matching items"
   }
 ]
