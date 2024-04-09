@@ -247,16 +247,16 @@ window.Quarto = {
 <figcaption>Image source: berkeley.edu</figcaption>
 </figure>
 </div>
-<section id="abstract" class="level2">
-<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<section id="abstract" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="abstract"><span class="header-section-number">1</span> Abstract</h2>
 <p>This replication study is based on the journal article <a href="https://www.science.org/doi/full/10.1126/science.aax2342">“Dissecting racial bias in an algorithm used to manage the health of populations”</a>.</p>
 <blockquote class="blockquote">
 <p>Obermeyer, Ziad, Brian Powers, Christine Vogeli, and Sendhil Mullainathan. 2019. “Dissecting Racial Bias in an Algorithm Used to Manage the Health of Populations.” Science 366 (6464): 447–53.</p>
 </blockquote>
 <p>The article analyzes the racial bias caused by healthcare algorithms that predict healthcare costs instead of illness. In the health system studied by the article, patients with risk scores above the 97th percentile are admitted into the care management program while those in the 55th percentile are referred to their primary care physician who are asked to consider whether the patient would benefit from the program. For equal risk scores, Blacks typically have a higher number of illnesses than Whites. This results in Blacks being less likely to be admitted to the care management program than Whites are. However, it also finds that because these algorithms target patients with high costs, the results are inconsistent by algorithmic bias, such as calibration. That is, across the entire risk distribution, predictions of cost are unbiased towards Whites or Blacks by risk score. This study aimed to replicate these findings through Figure 1 and 3 from the article and calculate the cost disparity shown in Figure 3 using linear regression. After replicating the figures and calculating the cost disparity, this study confirmed the findings of the article. At similar risk scores, Blacks typically are typically more ill than Whites and conditional on risk score, there is no significant difference between predicted costs.</p>
 </section>
-<section id="overview-of-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="overview-of-the-data">Overview of the Data</h2>
+<section id="overview-of-the-data" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="overview-of-the-data"><span class="header-section-number">2</span> Overview of the Data</h2>
 <p>The authors did not share the “real” data to protect patient privacy. Instead, the data contains attributes for each patient with randomized data that preserves many of the same patterns and trends. More information on the data can be found <a href="https://gitlab.com/labsysmed/dissecting-bias/-/blob/master/data/data_dictionary.md">here</a>. The attributes used in this replication study are:</p>
 <ul>
 <li><code>risk_score_t</code>: the patient’s risk assigned by the algorithm</li>
@@ -433,8 +433,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="reproducing-figure-1" class="level2">
-<h2 class="anchored" data-anchor-id="reproducing-figure-1">Reproducing Figure 1</h2>
+<section id="reproducing-figure-1" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="reproducing-figure-1"><span class="header-section-number">3</span> Reproducing Figure 1</h2>
 <p>Figure 1 in the article depicts the relationship between the mean number of chronic illnesses and the percentiles of risk scores for patients divided by race and gender. To reproduce Figure 1, each <code>risk_score_t</code> must be converted into its percentile value. The percentiles are stored in the column <code>risk_percentile</code>.</p>
 <div id="cell-5" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
@@ -552,8 +552,8 @@ Figure&nbsp;1: Male patients
 </div>
 <p>As seen in <a href="#fig-risk-ill" class="quarto-xref">Figure&nbsp;1</a> of this study, for a given mean number of chronic illnesses, Blacks are typically given a much lower risk score than Whites are. As a result, they will be much less likely to be referred to the high-risk care management program than Whites will. This corroborates the findings of the article.</p>
 </section>
-<section id="reproducing-figure-3" class="level2">
-<h2 class="anchored" data-anchor-id="reproducing-figure-3">Reproducing Figure 3</h2>
+<section id="reproducing-figure-3" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="reproducing-figure-3"><span class="header-section-number">4</span> Reproducing Figure 3</h2>
 <p>Figure 3 from the article depicts the the total expenditure for patients given their percentile of risk scores and total number of chronic illnesses. Below is the replication of Figure 3.</p>
 <div id="cell-fig-risk-ill-cost" class="cell" data-execution_count="5">
 <details class="code-fold">
@@ -632,8 +632,8 @@ Figure&nbsp;2: Replication of Figure 3 from the article.
 </div>
 <p>Looking at <a href="#fig-risk-ill-cost" class="quarto-xref">Figure&nbsp;2</a> from this study, we can see that both Blacks and Whites have similar total costs by both the percentile of risk scores and the total number of chronic illnesses. Additionally, it’s also important to note that most patients have five or fewer chronic illnesses, so looking at <a href="#fig-risk-ill-cost" class="quarto-xref">Figure&nbsp;2</a>, we can see that Blacks actually generate lower costs than Whites for patients with fewer than five chronic illnesses. In fact, the article states that Blacks generate on average about $1801 less per year in costs which <a href="#fig-risk-ill" class="quarto-xref">Figure&nbsp;1</a> seems to support.</p>
 </section>
-<section id="modeling-cost-disparity" class="level2">
-<h2 class="anchored" data-anchor-id="modeling-cost-disparity">Modeling Cost Disparity</h2>
+<section id="modeling-cost-disparity" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="modeling-cost-disparity"><span class="header-section-number">5</span> Modeling Cost Disparity</h2>
 <p>Building on the findings from <a href="#fig-risk-ill" class="quarto-xref">Figure&nbsp;1</a>, I attempt to quantify the disparity in cost for patients with five or fewer chronic illnesses. The reason for only looking at patients with five or fewer chronic illnesses, as stated above, is because there are much fewer patients with more than five chronic illnesses. To model the mean total expenditure for patients with five or fewer chronic illnesses, I use polynomial linear regression to predict the logarithm of the costs then extract the coefficient, <span class="math inline">\(w_b\)</span>, given to Blacks. In the context of a log-transformed linear model, <span class="math inline">\(e^{w_b}\)</span> is an estimate for the percentage of cost generated by Blacks compared to a Whites with an equal number of chronic illnesses. Additionally, the reason for a polynomial linear regression model is to account for nonlinearity.</p>
 <p>To confirm the claim that most patients have five or fewer chronic illnesses, here is the percentage of patients with five or fewer chronic illnesses.</p>
 <div id="cell-16" class="cell" data-execution_count="6">
@@ -853,8 +853,8 @@ Figure&nbsp;2: Replication of Figure 3 from the article.
 </div>
 <p>As we can see, Blacks generate an estimated 86.8% the cost of Whites. This roughly confirms the findings from the article that Blacks generate less costs than Whites.</p>
 </section>
-<section id="discussion" class="level2">
-<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<section id="discussion" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="discussion"><span class="header-section-number">6</span> Discussion</h2>
 <p>For similar risk scores and number of illnesses, Blacks and Whites generate similar costs (<a href="#fig-risk-ill" class="quarto-xref">Figure&nbsp;1</a>). In fact, Blacks generate an estimated 87% less cost than Whites. However, when comparing Blacks and Whites by their risk score based on their chronic number of illnesses, Blacks have a much lower risk score per number of illnesses (<a href="#fig-risk-ill" class="quarto-xref">Figure&nbsp;1</a>). As a result, they are less likely to be accepted into the system’s care management program. Though the study meets the calibration criterion for fairness, it violates the independence criterion for fairness as Blacks have a lower acceptance rate into the system’s care managemet program than Whites. This could present a problem, since most industry-wide algorithms predict cost leading to bias against Blacks. This results in a system wide case of Blacks being unable to receive the healthcare they need, which in turn reduces their medical expenditures. To fix this bias, the authors of the article used an index variable which combined cost and health prediction, reducing the bias by 87%. The hope is that by showing that label bias is fixable other manufacturers will be prompted to make similar fixes, minimizing the risks of algorithmic predictions while still benefitting from them.</p>
 
 

@@ -257,9 +257,9 @@ window.Quarto = {
 <ol type="1">
 <li>Visualize the updates of the perceptron with <code>k=1</code> and show that it performs similarly to the regular perceptron.</li>
 <li>Visualize the updates of the perceptron with <code>k=10</code> and show it can still find a separating line in 2d.</li>
-<li>Visualize the updates of the perceptorn with <code>k=n</code> and show that it can still converge even if the data is not linearly separable, provided that the learning rate <span class="math inline">\(\alpha\)</span> is not separable.</li>
+<li>Visualize the updates of the perceptron with <code>k=n</code> and show that it can still converge even if the data is not linearly separable, provided that the learning rate <span class="math inline">\(\alpha\)</span> is not separable.</li>
 </ol>
-<p>At the end, I discuss the runtime complexity of a single iteration of both the regular perceptron alorithm and the minibatch perceptron algorithm.</p>
+<p>At the end, I discuss the runtime complexity of a single iteration of both the regular perceptron algorithm and the minibatch perceptron algorithm.</p>
 </section>
 <section id="implementing-perceptron" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="implementing-perceptron"><span class="header-section-number">2</span> Implementing Perceptron</h2>
@@ -285,7 +285,7 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mbgrad(<span class="va">self</span>, X, y, k <span class="op">=</span> <span class="dv">2</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>):</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> X<span class="op">@</span>self.w</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(((s<span class="op">*</span>y <span class="op">&lt;</span> <span class="dv">0</span>) <span class="op">*</span> y)[:, <span class="va">None</span>] <span class="op">*</span>X) <span class="op">*</span> alpha <span class="op">/</span> k</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To test my implemenation of the regular perceptron algorithm, I will generate a data set and run a minimal training loop that eventually achieves <code>loss = 0</code>.</p>
+<p>To test my implementation of the regular perceptron algorithm, I will generate a data set and run a minimal training loop that eventually achieves <code>loss = 0</code>.</p>
 <div id="cell-4" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
@@ -294,7 +294,7 @@ window.Quarto = {
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> perceptron <span class="im">import</span> Perceptron, PerceptronOptimizer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Before running the test, I will first define some functions that will be used to generate and visualize the data.</p>
+<p>But before running the test, I will first define some functions that will be used to generate and visualize the data.</p>
 <div id="cell-6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -553,7 +553,7 @@ Figure&nbsp;4: Updates for P.1.
 </div>
 </div>
 </div>
-<p>As we can see from the plots, the perceptron algorithm can sucessfully achieve <code>loss = 0</code> and found a separating line for linearly separable data.</p>
+<p>As we can see from the plots, the perceptron algorithm can successfully achieve <code>loss = 0</code> and found a separating line for linearly separable data.</p>
 </section>
 <section id="sec-p2" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="sec-p2"><span class="header-section-number">3.2</span> Not Linearly Separable</h3>
@@ -657,7 +657,7 @@ Figure&nbsp;7: Loss over time for updates only.
 </section>
 <section id="experimentation-minibatch-perceptron" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="experimentation-minibatch-perceptron"><span class="header-section-number">4</span> Experimentation: Minibatch Perceptron</h2>
-<p>For the minibatch perceptron, I will be running the following experiments: 1. Visualize the updates of the perceptron with <code>k=1</code> and show that it performs similarly to the regular perceptron. 2. Visualize the updates of the perceptron with <code>k=10</code> and show it can still find a separating line in 2d. 3. Visualize the updates of the perceptorn with <code>k=n</code> and show that it can still converge even if the data is not linearly separable, provided that the learning rate <span class="math inline">\(\alpha\)</span> is not separable.</p>
+<p>For the minibatch perceptron, I will be running the following experiments: 1. Visualize the updates of the perceptron with <code>k=1</code> and show that it performs similarly to the regular perceptron. 2. Visualize the updates of the perceptron with <code>k=10</code> and show it can still find a separating line in 2d. 3. Visualize the updates of the perceptron with <code>k=n</code> and show that it can still converge even if the data is not linearly separable, provided that the learning rate <span class="math inline">\(\alpha\)</span> is not separable.</p>
 <p>For the experiments, I will be using the data from <a href="#sec-p1" class="quarto-xref">Section&nbsp;3.1</a> and <a href="#sec-p2" class="quarto-xref">Section&nbsp;3.2</a>.</p>
 <details class="code-fold">
 <summary>Code</summary>
@@ -857,7 +857,7 @@ Figure&nbsp;11: Updates for <code>k = 10</code>.
 </section>
 <section id="k-n" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="k-n"><span class="header-section-number">4.3</span> <code>k = n</code></h3>
-<p>To show that the minibatch perceptron will converge for <code>k = n</code> even if the data is not linearly separable, I use the data from <a href="#sec-p2" class="quarto-xref">Section&nbsp;3.2</a> (<a href="#fig-mb1-2" class="quarto-xref">Figure&nbsp;8 (b)</a>). Even though it will not be able to achieve <code>loss = 0</code>, the <code>loss</code> should still even out at some <code>loss &lt; 0.5</code>.</p>
+<p>To show that the minibatch perceptron will converge for <code>k = n</code> even if the data is not linearly separable, I use the data from <a href="#fig-mb1-2" class="quarto-xref">Figure&nbsp;8 (b)</a>. Even though it will not be able to achieve <code>loss = 0</code>, the <code>loss</code> should still even out at some <code>loss &lt; 0.5</code>.</p>
 <div id="cell-51" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> X2.size()[<span class="dv">0</span>]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ix_vec, loss_vec, old_w, p_w, local_loss_vec, updates <span class="op">=</span> mb_training_loop(X2, y2, k <span class="op">=</span> n, alpha <span class="op">=</span> <span class="fl">0.001</span>, max_iters <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -920,27 +920,27 @@ Figure&nbsp;12: Results of MB.3.
 </section>
 <section id="runtime-complexity" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="runtime-complexity"><span class="header-section-number">5</span> Runtime Complexity</h2>
-<p>From these experiments, we can conclude that the minibatch perceptorn is more powerful than the regular perceptron. However, does it require more processing power and time to run the minibatch perceptron? More specifically, what are the runtime complexities for each iteration of both perceptron algorithms and are they dependent on the number of data points <span class="math inline">\(n\)</span> or the number of features <span class="math inline">\(p\)</span>?</p>
+<p>From these experiments, we can conclude that the minibatch perceptron is more powerful than the regular perceptron. However, does it require more processing power and time to run the minibatch perceptron? More specifically, what are the runtime complexities for each iteration of both perceptron algorithms and are they dependent on the number of data points <span class="math inline">\(n\)</span> or the number of features <span class="math inline">\(p\)</span>?</p>
 <section id="perceptron" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="perceptron"><span class="header-section-number">5.1</span> Perceptron</h3>
-<p>To do this, let’s review the perceptron algorithms and the code implementation of them. Going back to the update equation for the perceptron, we have <span class="math display">\[\mathbf{w}^{(t+1)} =  \mathbf{w}^{(t)} + \mathbb{1}[s_i y_i &lt; 0]y_i\mathbf{x}_i.\]</span> where <span class="math display">\[s^{(t)}_i = \langle\mathbf{w}^{(t)}, \mathbf{x}_i\rangle.\]</span> To caclulate the score <span class="math inline">\(s_i^{(t)}\)</span>, we need to calculate the dot product for <span class="math inline">\(\mathbf{w}^{(t)}\)</span> and <span class="math inline">\(\mathbf{x}_i\)</span>. Given <span class="math inline">\(p\)</span> features, to calculate <span class="math inline">\(s_i\)</span>, the algorithm has a runtime complexity of <span class="math inline">\(O(p)\)</span>. Then going through the rest of the equation we get:</p>
+<p>To do this, let’s review the perceptron algorithms and the code implementation of them. Going back to the update equation for the perceptron, we have <span class="math display">\[\mathbf{w}^{(t+1)} =  \mathbf{w}^{(t)} + \mathbb{1}[s_i y_i &lt; 0]y_i\mathbf{x}_i.\]</span> where <span class="math display">\[s^{(t)}_i = \langle\mathbf{w}^{(t)}, \mathbf{x}_i\rangle.\]</span> To calculate the score <span class="math inline">\(s_i^{(t)}\)</span>, we need to calculate the dot product for <span class="math inline">\(\mathbf{w}^{(t)}\)</span> and <span class="math inline">\(\mathbf{x}_i\)</span>. Given <span class="math inline">\(p\)</span> features, to calculate <span class="math inline">\(s_i\)</span>, the algorithm has a runtime complexity of <span class="math inline">\(O(p)\)</span>. Then going through the rest of the equation we get:</p>
 <ol type="1">
 <li><span class="math inline">\(s_i y_i \to O(p + n)\)</span></li>
 <li><span class="math inline">\(\mathbb{1}[s_i y_i &lt; 0] \to O(p + 2n)\)</span></li>
 <li><span class="math inline">\(\mathbb{1}[s_i y_i &lt; 0]y_i \to O(p + 3n)\)</span></li>
 <li><span class="math inline">\((\mathbb{1}[s_i y_i &lt; 0]y_i)\mathbf{x}_i \to O(2p+3n) = O(p+n)\)</span>.</li>
 </ol>
-<p>So, the runtime complexity for the regular perceptron aglorithm is <span class="math inline">\(O(n + p)\)</span> meaning it is dependent on the number of data points <span class="math inline">\(n\)</span> and the number of features <span class="math inline">\(p\)</span>.</p>
+<p>So, the runtime complexity for the regular perceptron algorithm is <span class="math inline">\(O(n + p)\)</span> meaning it is dependent on the number of data points <span class="math inline">\(n\)</span> and the number of features <span class="math inline">\(p\)</span>.</p>
 </section>
 <section id="minibatch-perceptron" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="minibatch-perceptron"><span class="header-section-number">5.2</span> Minibatch Perceptron</h3>
 <p>For the minibatch perceptron, the update equation is defined as: <span class="math display">\[\mathbf{w}^{(t+1)} =  \mathbf{w}^{(t)} + \frac{\alpha}{k}\sum_{\ell=1}^k\mathbb{1}[s_{i_\ell} y_{i_\ell} &lt; 0]y_{i_\ell}\mathbf{x}_{i_\ell}.\]</span> Similar to <span class="math inline">\(s_i\)</span>, <span class="math inline">\(s_{i_\ell}\)</span> has a runtime complexity of <span class="math inline">\(O(n)\)</span> and likewise <span class="math inline">\((\mathbb{1}[s_{i_\ell} y_{i_\ell} &lt; 0]y_{i_\ell})\mathbf{x}_{i_\ell}\)</span> has runtime complexity <span class="math inline">\(O(2p + 3n) = O(p + n)\)</span>. We then do this <span class="math inline">\(k\)</span> times where <span class="math inline">\(k\)</span> is the number of randomly selected points. Assuming the worse case scenario of <span class="math inline">\(k = n\)</span>, we get a runtime complexity of <span class="math inline">\(O(np + n^2)\)</span>. Additionally, we must compute the sum of the resulting vectors for <span class="math inline">\(k=n\)</span> randomly selected points. Because each vector contains <span class="math inline">\(p\)</span> values and there are <span class="math inline">\(n\)</span> total vectors, the operation will have runtime complexity <span class="math inline">\(O(np)\)</span>. Then, the total runtime complexity is <span class="math inline">\(O(2np + n^2) = O(np + n^2)\)</span>.</p>
-<p>To summarize, the regular perceptorn has a runtime complexity of <span class="math inline">\(O(n + p)\)</span> and the minibatch perceptron has a runtime complexity of <span class="math inline">\(O(np + n^2)\)</span>. From this, we can see that though the minibatch perceptron is more powerful than the regular perceptorn but as a tradeoff, requires more processing power and time to run.</p>
+<p>To summarize, the regular perceptron has a runtime complexity of <span class="math inline">\(O(n + p)\)</span> and the minibatch perceptron has a runtime complexity of <span class="math inline">\(O(np + n^2)\)</span>. From this, we can see that though the minibatch perceptron is more powerful than the regular perceptron but as a tradeoff, requires more processing power and time to run.</p>
 </section>
 </section>
 <section id="discussion" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="discussion"><span class="header-section-number">6</span> Discussion</h2>
-<p>From the experiments with the perceptron, we found that it could converge to a separating line for linearly separable data with two or more features, but will not be able to converge for not linearly separable data. Then from the experiments with the minibatch perceptron, we found that it performed exactly the same as the regular perceptron when <code>k = 1</code> and <span class="math inline">\(\alpha = 1\)</span> when using the same dataset and starting <span class="math inline">\(\mathbf{w}\)</span>. That is, it found the same separating line with the same amount of updates for linearly separable data and the same decision boundary in the final iteration for not linearly separable data. This is due to the fact that the update to <span class="math inline">\(\mathbf{w}\)</span> for the minibatch perceptron becomes the same as the update to <span class="math inline">\(\mathbf{w}\)</span> for the regular perceptron when <code>k = 1</code> and <span class="math inline">\(\alpha = 1\)</span>. Additionally, we found that the minibatch perceptorn converges for <code>k = 10</code> for linearly separable data and it converges to a <code>loss &lt; 0.5</code> for not linearly separable when <code>k = n</code>.</p>
+<p>From the experiments with the perceptron, we found that it could converge to a separating line for linearly separable data with two or more features, but will not be able to converge for not linearly separable data. Then from the experiments with the minibatch perceptron, we found that it performed exactly the same as the regular perceptron when <code>k = 1</code> and <span class="math inline">\(\alpha = 1\)</span> when using the same dataset and starting <span class="math inline">\(\mathbf{w}\)</span>. That is, it found the same separating line with the same amount of updates for linearly separable data and the same decision boundary in the final iteration for not linearly separable data. This is due to the fact that the update to <span class="math inline">\(\mathbf{w}\)</span> for the minibatch perceptron becomes the same as the update to <span class="math inline">\(\mathbf{w}\)</span> for the regular perceptron when <code>k = 1</code> and <span class="math inline">\(\alpha = 1\)</span>. Additionally, we found that the minibatch perceptron converges for <code>k = 10</code> for linearly separable data and it converges to a <code>loss &lt; 0.5</code> for not linearly separable when <code>k = n</code>.</p>
 <p>Comparing the two algorithms, we found that the minibatch perceptron is more powerful than the regular perceptron, but as a result, requires more processing time to run.</p>
 
 

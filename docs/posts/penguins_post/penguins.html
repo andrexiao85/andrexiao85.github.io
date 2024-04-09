@@ -247,19 +247,22 @@ window.Quarto = {
 <figcaption>Image source: @allisonhorst</figcaption>
 </figure>
 </div>
-<p>This data set contains physiological measurements and species labels for several populations of Adelie, Chinstrap, and Gentoo penguins in the Palmer Archipelago, Antarctica. We will be attempting to find three features (two quantitative and one qualitative) that will be able to predict the penguins’ species with 100% testing accuracy.</p>
-<p>[The Palmer Penguins data was originally collected by <code>@gormanEcologicalSexualDimorphism2014</code> and was nicely packaged and released for use in the data science community by <code>@horstAllisonhorstPalmerpenguinsV02020</code>.]</p>
-<section id="importing-data" class="level2">
-<h2 class="anchored" data-anchor-id="importing-data">Importing Data</h2>
+<section id="abstract" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="abstract"><span class="header-section-number">1</span> Abstract</h2>
+<p>This data set contains physiological measurements and species labels for several populations of Adelie, Chinstrap, and Gentoo penguins in the Palmer Archipelago, Antarctica. This study attempts to find three features (two quantitative and one qualitative) that will be able to predict the penguins’ species with 100% testing accuracy. To do this, I experiment with <code>scikit-learn's</code> logistic regression, support vector machine, random forest classifier, and decision tree classifier models. In the end, the logistic regression model was able to predict the penguins’ species with 100% testing accuracy.</p>
+<p><em>The Palmer Penguins data was originally collected by <code>@gormanEcologicalSexualDimorphism2014</code> and was nicely packaged and released for use in the data science community by <code>@horstAllisonhorstPalmerpenguinsV02020</code>.</em></p>
+</section>
+<section id="importing-data" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">2</span> Importing Data</h2>
 <p>First, let’s import the data from <a href="https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/train.csv">here</a>, simplify the penguins’ species name, and look at the first five rows of data.</p>
-<div id="cell-2" class="cell" data-execution_count="34">
+<div id="cell-2" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>train_url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/train.csv"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(train_url)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>train[<span class="st">'Species'</span>] <span class="op">=</span> train[<span class="st">'Species'</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.get(<span class="dv">0</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="53">
 <div>
 
 
@@ -394,24 +397,52 @@ window.Quarto = {
 </div>
 </div>
 <p>After importing the data, we need to clean our data and prepare our qualitative data. The below function uses one-hot encoding to turn the qualitative data into <code>0</code> and <code>1</code> columns. In this case, the values will be <code>True</code> and <code>False</code>. Additionally, the function also splits away our <span class="math inline">\(y\)</span> variable which is stored in the variable <code>y_train</code>.</p>
-<div id="cell-4" class="cell" data-execution_count="35">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>le.fit(train[<span class="st">"Species"</span>])</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data(df):</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.drop([<span class="st">"studyName"</span>, <span class="st">"Sample Number"</span>, <span class="st">"Individual ID"</span>, <span class="st">"Date Egg"</span>, <span class="st">"Comments"</span>, <span class="st">"Region"</span>], axis <span class="op">=</span> <span class="dv">1</span>) <span class="co"># drop unwanted columns</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df[df[<span class="st">"Sex"</span>] <span class="op">!=</span> <span class="st">"."</span>] <span class="co"># remove . from SEX data</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.dropna() <span class="co"># drop NaNs</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> le.transform(df[<span class="st">"Species"</span>]) <span class="co"># set's species as y data</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.drop([<span class="st">"Species"</span>], axis <span class="op">=</span> <span class="dv">1</span>) <span class="co"># drops species from x data</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> pd.get_dummies(df) <span class="co"># one-hot encoding, '0-1' columns</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> df, y</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>X_train, y_train <span class="op">=</span> prepare_data(train)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>X_train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div id="cell-4" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
+<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder()</span>
+<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a>le.fit(train[<span class="st">"Species"</span>])</span>
+<span id="annotated-cell-2-5"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-2-6"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data(df):</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-7" class="code-annotation-target"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.drop([<span class="st">"studyName"</span>, <span class="st">"Sample Number"</span>, <span class="st">"Individual ID"</span>, <span class="st">"Date Egg"</span>, <span class="st">"Comments"</span>, <span class="st">"Region"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2">2</button><span id="annotated-cell-2-8" class="code-annotation-target"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df[df[<span class="st">"Sex"</span>] <span class="op">!=</span> <span class="st">"."</span>]</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-9" class="code-annotation-target"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.dropna()</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4">4</button><span id="annotated-cell-2-10" class="code-annotation-target"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> le.transform(df[<span class="st">"Species"</span>])</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="5">5</button><span id="annotated-cell-2-11" class="code-annotation-target"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.drop([<span class="st">"Species"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="6">6</button><span id="annotated-cell-2-12" class="code-annotation-target"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> pd.get_dummies(df)</span>
+<span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> df, y</span>
+<span id="annotated-cell-2-14"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-2-15"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>X_train, y_train <span class="op">=</span> prepare_data(train)</span>
+<span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a>X_train.head()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="7" data-code-annotation="1">Drop unwanted columns.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="8" data-code-annotation="2">Remove <code>.</code> from SEX data.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="9" data-code-annotation="3">drop <code>NaNs</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="10" data-code-annotation="4">Sets species as <span class="math inline">\(y\)</span> data.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="11" data-code-annotation="5">Drops species from <span class="math inline">\(x\)</span> data.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="12" data-code-annotation="6">One-hot encoding, <code>0-1</code> columns.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="54">
 <div>
 
 
@@ -528,50 +559,81 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="visualization-of-a-couple-features" class="level2">
-<h2 class="anchored" data-anchor-id="visualization-of-a-couple-features">Visualization of a Couple Features</h2>
+<section id="visualization-of-a-couple-features" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="visualization-of-a-couple-features"><span class="header-section-number">3</span> Visualization of a Couple Features</h2>
 <p>Let’s visualize some potential features using two scatterplots and a summary table. In the two graphs below, I build up on these <a href="https://www.philchodrow.prof/ml-notes/chapters/02-black-box-classification.html">notes</a>. In these notes, we discovered that <code>Culmen Length (mm)</code> and <code>Culmen Depth (mm)</code> are strong features to use to classify species type. In this study, I will be adding a qualitative data to help improve the test accuracy of the model.</p>
-<section id="figures" class="level3">
-<h3 class="anchored" data-anchor-id="figures">Figures</h3>
+<section id="figures" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="figures"><span class="header-section-number">3.1</span> Figures</h3>
 <p>The figure on the left uses the <code>Island</code> column as the qualitative feature and the figure on the right uses the <code>Sex</code> column as the qualitative feature.</p>
-<div id="cell-6" class="cell" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize <span class="op">=</span> (<span class="dv">15</span>, <span class="dv">6</span>))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="op">=</span> sns.scatterplot(X_train, x <span class="op">=</span> <span class="st">'Culmen Length (mm)'</span>, y <span class="op">=</span> <span class="st">'Culmen Depth (mm)'</span>, style <span class="op">=</span> train[<span class="st">'Island'</span>].dropna(), hue <span class="op">=</span> train[<span class="st">'Species'</span>].dropna(), ax <span class="op">=</span> ax[<span class="dv">0</span>])</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>p2 <span class="op">=</span> sns.scatterplot(X_train, x <span class="op">=</span> <span class="st">'Culmen Length (mm)'</span>, y <span class="op">=</span> <span class="st">'Culmen Depth (mm)'</span>, style <span class="op">=</span> <span class="st">'Sex_MALE'</span>, hue <span class="op">=</span> train[<span class="st">'Species'</span>].dropna(), ax <span class="op">=</span> ax[<span class="dv">1</span>])</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>p1.set_title(<span class="st">'Species by Culmen Length, Culmen Depth, and Island'</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>p2.set_title(<span class="st">'Species by Culmen Length, Culmen Depth, and Sex'</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#sns.move_legend(p1, "upper right", bbox_to_anchor=(1, .5))</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.setp(ax[0].get_legend().get_texts(), fontsize='8')</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#sns.move_legend(p2, "upper right", bbox_to_anchor=(1, .5))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
-<pre><code>Text(0.5, 1.0, 'Species by Culmen Length, Culmen Depth, and Sex')</code></pre>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize <span class="op">=</span> (<span class="dv">7</span>, <span class="dv">6</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>fig1, ax1 <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize <span class="op">=</span> (<span class="dv">7</span>, <span class="dv">6</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>p1 <span class="op">=</span> sns.scatterplot(X_train, x <span class="op">=</span> <span class="st">'Culmen Length (mm)'</span>, y <span class="op">=</span> <span class="st">'Culmen Depth (mm)'</span>, style <span class="op">=</span> train[<span class="st">'Island'</span>].dropna(), hue <span class="op">=</span> train[<span class="st">'Species'</span>].dropna(), ax <span class="op">=</span> ax)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>p2 <span class="op">=</span> sns.scatterplot(X_train, x <span class="op">=</span> <span class="st">'Culmen Length (mm)'</span>, y <span class="op">=</span> <span class="st">'Culmen Depth (mm)'</span>, style <span class="op">=</span> <span class="st">'Sex_MALE'</span>, hue <span class="op">=</span> train[<span class="st">'Species'</span>].dropna(), ax <span class="op">=</span> ax1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="fig-species" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-species" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-species-1" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-species-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="penguins_files/figure-html/fig-species-output-1.png" class="img-fluid figure-img" data-ref-parent="fig-species">
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-species-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Species by Culmen Length, Culmen Depth, and Island.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-species" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-species-2" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-species-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="penguins_files/figure-html/fig-species-output-2.png" class="img-fluid figure-img" data-ref-parent="fig-species">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-species-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Species by Culmen Length, Culmen Depth, and Sex.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Compares Species by culmen length, culmen depth, island and sex.
+</figcaption>
+</figure>
+</div>
 <p>We can see that both figures have three distinct clusters of points. This is thanks to using <code>Culmen Length (mm)</code> and <code>Culmen Depth (mm)</code> as features. However, there are a few points that overlap regions. In the left figure, we can see that all <strong>Chinstrap</strong> and <strong>Gentoo</strong> penguins reside on Dream Island and Biscoe Island, respectively Meanwhile, <strong>Adelie</strong> penguins live on three islands, however, <strong>Adelie</strong> penguins that are near the general Chinstrap (blue) region of the figure reside on Torgersen Island.</p>
 <p>In the right figure, we can see most <strong>Adelie</strong> and <strong>Gentoo</strong> penguins that are located near the Chinstrap (blue) region of the figure are male.</p>
 </section>
-<section id="summary-table" class="level3">
-<h3 class="anchored" data-anchor-id="summary-table">Summary Table</h3>
+<section id="summary-table" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="summary-table"><span class="header-section-number">3.2</span> Summary Table</h3>
 <p>Let’s take a closer look at the <code>Island</code> feature. The table below describes the number of each species on each island.</p>
-<div id="cell-8" class="cell" data-execution_count="37">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(train.groupby(by<span class="op">=</span>[<span class="st">'Species'</span>, <span class="st">'Island'</span>]).aggregate({<span class="st">'Species'</span>:<span class="st">'count'</span>}) <span class="op">/</span> train.groupby(by<span class="op">=</span>[<span class="st">'Species'</span>]).aggregate({<span class="st">'Species'</span>:<span class="st">'count'</span>})).rename(columns<span class="op">=</span>{<span class="st">'Species'</span>:<span class="st">'Distribution of Species'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell" data-execution_count="56">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(train.groupby(by<span class="op">=</span>[<span class="st">'Species'</span>, <span class="st">'Island'</span>]).aggregate({<span class="st">'Species'</span>:<span class="st">'count'</span>}) <span class="op">/</span> train.groupby(by<span class="op">=</span>[<span class="st">'Species'</span>]).aggregate({<span class="st">'Species'</span>:<span class="st">'count'</span>})).rename(columns<span class="op">=</span>{<span class="st">'Species'</span>:<span class="st">'Distribution of Species'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-island" class="cell quarto-float anchored" data-execution_count="56">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-island-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Distribution of Species by Island.
+</figcaption>
+<div aria-describedby="tbl-island-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="56">
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -614,175 +676,203 @@ window.Quarto = {
 </div>
 </div>
 </div>
+</figure>
+</div>
+</div>
 <p>We can see that Adelie penguins are spread out among all three islands, whereas, Chinstrap and Gentoo penguins reside only on Dream and Biscoe Island respectively. We can then most likely use <code>Culmen Length (mm)</code> and <code>Culmen Depth (mm)</code> to seperate the Adelie penguins from Gentoos and Chinstraps on Dream and Biscoe Island.</p>
 </section>
 </section>
-<section id="finding-the-best-features" class="level2">
-<h2 class="anchored" data-anchor-id="finding-the-best-features">Finding the Best Features</h2>
+<section id="finding-the-best-features" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="finding-the-best-features"><span class="header-section-number">4</span> Finding the Best Features</h2>
 <p>We will try to find the best features for multiple models: logisitc regression, random forest classifer, decision tree classifier, and support vector machine.</p>
 <p>The function below uses cross-validation to determine the three best features (two qualitative and one qualitative) and the respective score for a given model. We will be using five folds for cross-validation.</p>
-<div id="cell-11" class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#get all qualitative and quantitative columns</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>all_qual_cols <span class="op">=</span> <span class="bu">list</span>({col.split(<span class="st">'_'</span>)[<span class="dv">0</span>] <span class="cf">for</span> col <span class="kw">in</span> X_train.select_dtypes(exclude<span class="op">=</span>[<span class="st">'number'</span>]).columns}) <span class="co"># get pre-one-hot encoded column names for qual data</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>all_quant_cols <span class="op">=</span> X_train.select_dtypes(exclude<span class="op">=</span>[<span class="st">"bool_"</span>,<span class="st">"object_"</span>]).columns <span class="co"># quant data</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># uses cross-validation to find the best scores for each combination of two quantitative columns and one qualitative column</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># returns ([best columns], best score)</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cross_val(model, cv, best_score):</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">with</span> warnings.catch_warnings():</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    warnings.simplefilter(<span class="st">"ignore"</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> qual <span class="kw">in</span> all_qual_cols: </span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      qual_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_train.columns <span class="cf">if</span> qual <span class="kw">in</span> col ]</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> pair <span class="kw">in</span> combinations(all_quant_cols, <span class="dv">2</span>):</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        cols <span class="op">=</span> <span class="bu">list</span>(pair) <span class="op">+</span> qual_cols</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">#LR.fit(X_train[cols], y_train)</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        cv_scores <span class="op">=</span> cross_val_score(model, X_train[cols], y_train, cv <span class="op">=</span> cv) <span class="co"># cv = 5 assessments, 100 / 5 = 20% of training data withheld at a time for corss-validation</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        col_scores <span class="op">=</span> (cols, cv_scores.mean())</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> col_scores[<span class="dv">1</span>] <span class="op">&gt;</span> best_score[<span class="dv">1</span>]:</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>          best_score <span class="op">=</span> col_scores</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> best_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations</span>
+<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-3" class="code-annotation-target"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>all_qual_cols <span class="op">=</span> <span class="bu">list</span>({col.split(<span class="st">'_'</span>)[<span class="dv">0</span>] <span class="cf">for</span> col <span class="kw">in</span> X_train.select_dtypes(exclude<span class="op">=</span>[<span class="st">'number'</span>]).columns})</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2">2</button><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>all_quant_cols <span class="op">=</span> X_train.select_dtypes(exclude<span class="op">=</span>[<span class="st">"bool_"</span>,<span class="st">"object_"</span>]).columns</span>
+<span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="annotated-cell-5-7"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="annotated-cell-5-10"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-5-11"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># uses cross-validation to find the best scores for each combination of two quantitative columns and one qualitative column</span></span>
+<span id="annotated-cell-5-12"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># returns ([best columns], best score)</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="3">3</button><span id="annotated-cell-5-13" class="code-annotation-target"><a href="#annotated-cell-5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cross_val(model, cv, best_score):</span>
+<span id="annotated-cell-5-14"><a href="#annotated-cell-5-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">with</span> warnings.catch_warnings():</span>
+<span id="annotated-cell-5-15"><a href="#annotated-cell-5-15" aria-hidden="true" tabindex="-1"></a>    warnings.simplefilter(<span class="st">"ignore"</span>)</span>
+<span id="annotated-cell-5-16"><a href="#annotated-cell-5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> qual <span class="kw">in</span> all_qual_cols:</span>
+<span id="annotated-cell-5-17"><a href="#annotated-cell-5-17" aria-hidden="true" tabindex="-1"></a>      qual_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_train.columns <span class="cf">if</span> qual <span class="kw">in</span> col]</span>
+<span id="annotated-cell-5-18"><a href="#annotated-cell-5-18" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> pair <span class="kw">in</span> combinations(all_quant_cols, <span class="dv">2</span>):</span>
+<span id="annotated-cell-5-19"><a href="#annotated-cell-5-19" aria-hidden="true" tabindex="-1"></a>        cols <span class="op">=</span> <span class="bu">list</span>(pair) <span class="op">+</span> qual_cols</span>
+<span id="annotated-cell-5-20"><a href="#annotated-cell-5-20" aria-hidden="true" tabindex="-1"></a>        cv_scores <span class="op">=</span> cross_val_score(model, X_train[cols], y_train, cv <span class="op">=</span> cv)</span>
+<span id="annotated-cell-5-21"><a href="#annotated-cell-5-21" aria-hidden="true" tabindex="-1"></a>        col_scores <span class="op">=</span> (cols, cv_scores.mean())</span>
+<span id="annotated-cell-5-22"><a href="#annotated-cell-5-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> col_scores[<span class="dv">1</span>] <span class="op">&gt;</span> best_score[<span class="dv">1</span>]:</span>
+<span id="annotated-cell-5-23"><a href="#annotated-cell-5-23" aria-hidden="true" tabindex="-1"></a>          best_score <span class="op">=</span> col_scores</span>
+<span id="annotated-cell-5-24"><a href="#annotated-cell-5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> best_score</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="3" data-code-annotation="1">Get pre-one-hot encoded column names for qual data</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="4" data-code-annotation="2">Get quant data.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="13,14,15,16,17,18,19,20,21,22,23,24" data-code-annotation="3">Uses cross-validation to find the best scores for each combination of two quantitative columns and one qualitative column. Returns ([best columns], best score).</span>
+</dd>
+</dl>
+</div>
 </div>
 <p>The function below creates a plot of decision regions for a given model.</p>
-<div id="cell-13" class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Patch</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regions(model, X, y):</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    x0 <span class="op">=</span> X[X.columns[<span class="dv">0</span>]]</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> X[X.columns[<span class="dv">1</span>]]</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    qual_features <span class="op">=</span> X.columns[<span class="dv">2</span>:]</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    fig, axarr <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(qual_features), figsize <span class="op">=</span> (<span class="dv">7</span>, <span class="dv">3</span>))</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create a grid</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    grid_x <span class="op">=</span> np.linspace(x0.<span class="bu">min</span>(),x0.<span class="bu">max</span>(),<span class="dv">501</span>)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    grid_y <span class="op">=</span> np.linspace(x1.<span class="bu">min</span>(),x1.<span class="bu">max</span>(),<span class="dv">501</span>)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    xx, yy <span class="op">=</span> np.meshgrid(grid_x, grid_y)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    XX <span class="op">=</span> xx.ravel()</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    YY <span class="op">=</span> yy.ravel()</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(qual_features)):</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>      XY <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>          X.columns[<span class="dv">0</span>] : XX,</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>          X.columns[<span class="dv">1</span>] : YY</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>      })</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> j <span class="kw">in</span> qual_features:</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        XY[j] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>      XY[qual_features[i]] <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>      p <span class="op">=</span> model.predict(XY)</span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>      p <span class="op">=</span> p.reshape(xx.shape)</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>      <span class="co"># use contour plot to visualize the predictions</span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>      axarr[i].contourf(xx, yy, p, cmap <span class="op">=</span> <span class="st">"jet"</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, vmin <span class="op">=</span> <span class="dv">0</span>, vmax <span class="op">=</span> <span class="dv">2</span>)</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>      ix <span class="op">=</span> X[qual_features[i]] <span class="op">==</span> <span class="dv">1</span></span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># plot the data</span></span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>      axarr[i].scatter(x0[ix], x1[ix], c <span class="op">=</span> y[ix], cmap <span class="op">=</span> <span class="st">"jet"</span>, vmin <span class="op">=</span> <span class="dv">0</span>, vmax <span class="op">=</span> <span class="dv">2</span>)</span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>      axarr[i].<span class="bu">set</span>(xlabel <span class="op">=</span> X.columns[<span class="dv">0</span>], </span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>            ylabel  <span class="op">=</span> X.columns[<span class="dv">1</span>], </span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>            title <span class="op">=</span> qual_features[i])</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>      patches <span class="op">=</span> []</span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> color, spec <span class="kw">in</span> <span class="bu">zip</span>([<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span>], [<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>, <span class="st">"Gentoo"</span>]):</span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>        patches.append(Patch(color <span class="op">=</span> color, label <span class="op">=</span> spec))</span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>      plt.legend(title <span class="op">=</span> <span class="st">"Species"</span>, handles <span class="op">=</span> patches, loc <span class="op">=</span> <span class="st">"center left"</span>, bbox_to_anchor<span class="op">=</span>(<span class="dv">1</span>, <span class="fl">.5</span>))</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>      plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-15" class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="annotated-cell-6-3"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Patch</span>
+<span id="annotated-cell-6-4"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regions(model, X, y):</span>
+<span id="annotated-cell-6-6"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="annotated-cell-6-7"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>    x0 <span class="op">=</span> X[X.columns[<span class="dv">0</span>]]</span>
+<span id="annotated-cell-6-8"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> X[X.columns[<span class="dv">1</span>]]</span>
+<span id="annotated-cell-6-9"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a>    qual_features <span class="op">=</span> X.columns[<span class="dv">2</span>:]</span>
+<span id="annotated-cell-6-10"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="annotated-cell-6-11"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a>    fig, axarr <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(qual_features), figsize <span class="op">=</span> (<span class="dv">7</span>, <span class="dv">3</span>))</span>
+<span id="annotated-cell-6-12"><a href="#annotated-cell-6-12" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-13" class="code-annotation-target"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a>    grid_x <span class="op">=</span> np.linspace(x0.<span class="bu">min</span>(),x0.<span class="bu">max</span>(),<span class="dv">501</span>)</span>
+<span id="annotated-cell-6-14"><a href="#annotated-cell-6-14" aria-hidden="true" tabindex="-1"></a>    grid_y <span class="op">=</span> np.linspace(x1.<span class="bu">min</span>(),x1.<span class="bu">max</span>(),<span class="dv">501</span>)</span>
+<span id="annotated-cell-6-15"><a href="#annotated-cell-6-15" aria-hidden="true" tabindex="-1"></a>    xx, yy <span class="op">=</span> np.meshgrid(grid_x, grid_y)</span>
+<span id="annotated-cell-6-16"><a href="#annotated-cell-6-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="annotated-cell-6-17"><a href="#annotated-cell-6-17" aria-hidden="true" tabindex="-1"></a>    XX <span class="op">=</span> xx.ravel()</span>
+<span id="annotated-cell-6-18"><a href="#annotated-cell-6-18" aria-hidden="true" tabindex="-1"></a>    YY <span class="op">=</span> yy.ravel()</span>
+<span id="annotated-cell-6-19"><a href="#annotated-cell-6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-20"><a href="#annotated-cell-6-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(qual_features)):</span>
+<span id="annotated-cell-6-21"><a href="#annotated-cell-6-21" aria-hidden="true" tabindex="-1"></a>      XY <span class="op">=</span> pd.DataFrame({</span>
+<span id="annotated-cell-6-22"><a href="#annotated-cell-6-22" aria-hidden="true" tabindex="-1"></a>          X.columns[<span class="dv">0</span>] : XX,</span>
+<span id="annotated-cell-6-23"><a href="#annotated-cell-6-23" aria-hidden="true" tabindex="-1"></a>          X.columns[<span class="dv">1</span>] : YY</span>
+<span id="annotated-cell-6-24"><a href="#annotated-cell-6-24" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="annotated-cell-6-25"><a href="#annotated-cell-6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-26"><a href="#annotated-cell-6-26" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> j <span class="kw">in</span> qual_features:</span>
+<span id="annotated-cell-6-27"><a href="#annotated-cell-6-27" aria-hidden="true" tabindex="-1"></a>        XY[j] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="annotated-cell-6-28"><a href="#annotated-cell-6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-29"><a href="#annotated-cell-6-29" aria-hidden="true" tabindex="-1"></a>      XY[qual_features[i]] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-6-30"><a href="#annotated-cell-6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-31"><a href="#annotated-cell-6-31" aria-hidden="true" tabindex="-1"></a>      p <span class="op">=</span> model.predict(XY)</span>
+<span id="annotated-cell-6-32"><a href="#annotated-cell-6-32" aria-hidden="true" tabindex="-1"></a>      p <span class="op">=</span> p.reshape(xx.shape)</span>
+<span id="annotated-cell-6-33"><a href="#annotated-cell-6-33" aria-hidden="true" tabindex="-1"></a>      </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-34" class="code-annotation-target"><a href="#annotated-cell-6-34" aria-hidden="true" tabindex="-1"></a>      axarr[i].contourf(xx, yy, p, cmap <span class="op">=</span> <span class="st">"jet"</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, vmin <span class="op">=</span> <span class="dv">0</span>, vmax <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="annotated-cell-6-35"><a href="#annotated-cell-6-35" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="annotated-cell-6-36"><a href="#annotated-cell-6-36" aria-hidden="true" tabindex="-1"></a>      ix <span class="op">=</span> X[qual_features[i]] <span class="op">==</span> <span class="dv">1</span></span>
+<span id="annotated-cell-6-37"><a href="#annotated-cell-6-37" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="annotated-cell-6-38"><a href="#annotated-cell-6-38" aria-hidden="true" tabindex="-1"></a>      axarr[i].scatter(x0[ix], x1[ix], c <span class="op">=</span> y[ix], cmap <span class="op">=</span> <span class="st">"jet"</span>, vmin <span class="op">=</span> <span class="dv">0</span>, vmax <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="annotated-cell-6-39"><a href="#annotated-cell-6-39" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="annotated-cell-6-40"><a href="#annotated-cell-6-40" aria-hidden="true" tabindex="-1"></a>      axarr[i].<span class="bu">set</span>(xlabel <span class="op">=</span> X.columns[<span class="dv">0</span>], </span>
+<span id="annotated-cell-6-41"><a href="#annotated-cell-6-41" aria-hidden="true" tabindex="-1"></a>            ylabel  <span class="op">=</span> X.columns[<span class="dv">1</span>], </span>
+<span id="annotated-cell-6-42"><a href="#annotated-cell-6-42" aria-hidden="true" tabindex="-1"></a>            title <span class="op">=</span> qual_features[i])</span>
+<span id="annotated-cell-6-43"><a href="#annotated-cell-6-43" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="annotated-cell-6-44"><a href="#annotated-cell-6-44" aria-hidden="true" tabindex="-1"></a>      patches <span class="op">=</span> []</span>
+<span id="annotated-cell-6-45"><a href="#annotated-cell-6-45" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> color, spec <span class="kw">in</span> <span class="bu">zip</span>([<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span>], [<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>, <span class="st">"Gentoo"</span>]):</span>
+<span id="annotated-cell-6-46"><a href="#annotated-cell-6-46" aria-hidden="true" tabindex="-1"></a>        patches.append(Patch(color <span class="op">=</span> color, label <span class="op">=</span> spec))</span>
+<span id="annotated-cell-6-47"><a href="#annotated-cell-6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-48"><a href="#annotated-cell-6-48" aria-hidden="true" tabindex="-1"></a>      plt.legend(title <span class="op">=</span> <span class="st">"Species"</span>, handles <span class="op">=</span> patches, loc <span class="op">=</span> <span class="st">"center left"</span>, bbox_to_anchor<span class="op">=</span>(<span class="dv">1</span>, <span class="fl">.5</span>))</span>
+<span id="annotated-cell-6-49"><a href="#annotated-cell-6-49" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="annotated-cell-6-50"><a href="#annotated-cell-6-50" aria-hidden="true" tabindex="-1"></a>      plt.tight_layout()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="13,14,15" data-code-annotation="1">Create a grid.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="34" data-code-annotation="2">Use contour plot to visualize the predictions.</span>
+</dd>
+</dl>
 </div>
-<section id="logistic-regression" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regression">Logistic Regression</h3>
-<div id="cell-15" class="cell" data-execution_count="40">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression()</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>best_score_LR <span class="op">=</span> ([], <span class="dv">0</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>best_score_LR <span class="op">=</span> cross_val(LR, <span class="dv">5</span>, best_score_LR)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_LR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="logistic-regression" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="logistic-regression"><span class="header-section-number">4.1</span> Logistic Regression</h3>
+<p>Let’s find the columns with the best score.</p>
+<div id="cell-19" class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>best_score_LR <span class="op">=</span> ([], <span class="dv">0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>best_score_LR <span class="op">=</span> cross_val(LR, <span class="dv">5</span>, best_score_LR)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_LR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Island_Biscoe', 'Island_Dream', 'Island_Torgersen'], 0.9961538461538462)</code></pre>
 </div>
 </div>
 <p>For logistic regression, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Island</code> with a mean cross-validation score of about <strong>99.6%</strong> accuracy.</p>
 </section>
-<section id="random-forest-classifier" class="level3">
-<h3 class="anchored" data-anchor-id="random-forest-classifier">Random Forest Classifier</h3>
-<div id="cell-17" class="cell" data-execution_count="41">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>RFC <span class="op">=</span> RandomForestClassifier()</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>best_score_RFC <span class="op">=</span> ([], <span class="dv">0</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>best_score_RFC <span class="op">=</span> cross_val(RFC, <span class="dv">5</span>, best_score_RFC)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_RFC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="random-forest-classifier" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="random-forest-classifier"><span class="header-section-number">4.2</span> Random Forest Classifier</h3>
+<p>Let’s find the best columns with the best score.</p>
+<div id="cell-22" class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>RFC <span class="op">=</span> RandomForestClassifier()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>best_score_RFC <span class="op">=</span> ([], <span class="dv">0</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>best_score_RFC <span class="op">=</span> cross_val(RFC, <span class="dv">5</span>, best_score_RFC)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_RFC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Sex_FEMALE', 'Sex_MALE'], 0.9883107088989442)</code></pre>
+<pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Sex_FEMALE', 'Sex_MALE'], 0.9843891402714933)</code></pre>
 </div>
 </div>
 <p>For the random forest classifier, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> with a mean cross-validation score of about <strong>98.8%</strong> accuracy.</p>
 </section>
-<section id="decision-tree-classifier" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier">Decision Tree Classifier</h3>
-<p>For the decision tree classifier, we must also find the optimal max depth. We test integer values for 5 to 50 and choose the best value.</p>
-<div id="cell-19" class="cell" data-execution_count="42">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>depth <span class="op">=</span> np.arange(<span class="dv">5</span>, <span class="dv">50</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>best_score_DTC <span class="op">=</span> ([], <span class="dv">0</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>best_d <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> depth:</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    DTC <span class="op">=</span> DecisionTreeClassifier(max_depth <span class="op">=</span> d)</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(d)</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    cross_val_DTC <span class="op">=</span> cross_val(DTC, <span class="dv">5</span>, best_score_DTC)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(cross_val_DTC, best_score_DTC)</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cross_val_DTC[<span class="dv">1</span>] <span class="op">&gt;</span> best_score_DTC[<span class="dv">1</span>]:</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        best_score_DTC <span class="op">=</span> cross_val_DTC</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        best_d <span class="op">=</span> d</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_DTC, best_d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="decision-tree-classifier" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="decision-tree-classifier"><span class="header-section-number">4.3</span> Decision Tree Classifier</h3>
+<p>For the decision tree classifier, we must also find the optimal max depth. We test integer values from 5 to 50 and choose the best value.</p>
+<div id="cell-24" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>depth <span class="op">=</span> np.arange(<span class="dv">5</span>, <span class="dv">50</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>best_score_DTC <span class="op">=</span> ([], <span class="dv">0</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>best_d <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> depth:</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    DTC <span class="op">=</span> DecisionTreeClassifier(max_depth <span class="op">=</span> d)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(d)</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    cross_val_DTC <span class="op">=</span> cross_val(DTC, <span class="dv">5</span>, best_score_DTC)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(cross_val_DTC, best_score_DTC)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cross_val_DTC[<span class="dv">1</span>] <span class="op">&gt;</span> best_score_DTC[<span class="dv">1</span>]:</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        best_score_DTC <span class="op">=</span> cross_val_DTC</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        best_d <span class="op">=</span> d</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_DTC, best_d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Island_Biscoe', 'Island_Dream', 'Island_Torgersen'], 0.9765460030165913) 6</code></pre>
+<pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Island_Biscoe', 'Island_Dream', 'Island_Torgersen'], 0.9765460030165913) 5</code></pre>
 </div>
 </div>
 <p>For the decision tree classifier, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> with a mean cross-validation score of about <strong>97.6%</strong> accuracy using <code>max_depth = 6</code>.</p>
 </section>
-<section id="support-vector-machine" class="level3">
-<h3 class="anchored" data-anchor-id="support-vector-machine">Support Vector Machine</h3>
+<section id="support-vector-machine" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="support-vector-machine"><span class="header-section-number">4.4</span> Support Vector Machine</h3>
 <p>For the support vector machine, we must find the best gamma value. We test values from ranging from <span class="math inline">\(10^{-5}\)</span> to <span class="math inline">\(10^5\)</span>.</p>
-<div id="cell-22" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="dv">10</span><span class="op">**</span>np.arange(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, dtype <span class="op">=</span> <span class="bu">float</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>best_score_SVM <span class="op">=</span> ([], <span class="dv">0</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>best_g <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> g <span class="kw">in</span> gamma:</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    SVM <span class="op">=</span> SVC(gamma <span class="op">=</span> g)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(d)</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    cross_val_SVM <span class="op">=</span> cross_val(SVM, <span class="dv">5</span>, best_score_SVM)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(cross_val_DTC, best_score_DTC)</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cross_val_SVM[<span class="dv">1</span>] <span class="op">&gt;</span> best_score_SVM[<span class="dv">1</span>]:</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        best_score_SVM <span class="op">=</span> cross_val_SVM</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        best_g <span class="op">=</span> g</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_SVM, best_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-27" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="dv">10</span><span class="op">**</span>np.arange(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, dtype <span class="op">=</span> <span class="bu">float</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>best_score_SVM <span class="op">=</span> ([], <span class="dv">0</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>best_g <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> g <span class="kw">in</span> gamma:</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    SVM <span class="op">=</span> SVC(gamma <span class="op">=</span> g)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(d)</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    cross_val_SVM <span class="op">=</span> cross_val(SVM, <span class="dv">5</span>, best_score_SVM)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(cross_val_DTC, best_score_DTC)</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cross_val_SVM[<span class="dv">1</span>] <span class="op">&gt;</span> best_score_SVM[<span class="dv">1</span>]:</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        best_score_SVM <span class="op">=</span> cross_val_SVM</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        best_g <span class="op">=</span> g</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(best_score_SVM, best_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(['Culmen Length (mm)', 'Culmen Depth (mm)', 'Sex_FEMALE', 'Sex_MALE'], 0.9805429864253394) 0.1</code></pre>
 </div>
@@ -790,226 +880,185 @@ window.Quarto = {
 <p>For the support vector machine, we can see that the best features are <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> with a mean cross-validation score of about <strong>98%</strong> accuracy using <code>gamma = 0.1</code>.</p>
 </section>
 </section>
-<section id="training-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="training-the-data">Training the Data</h2>
-<section id="logistic-regression-1" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regression-1">Logistic Regression</h3>
-<div id="cell-24" class="cell" data-execution_count="61">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cols_LR <span class="op">=</span> best_score_LR[<span class="dv">0</span>]</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> warnings.catch_warnings():</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    warnings.simplefilter(<span class="st">"ignore"</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    LR.fit(X_train[cols_LR], y_train)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    score_LR <span class="op">=</span> LR.score(X_train[cols_LR], y_train)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>score_LR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="61">
+<section id="training-the-data" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="training-the-data"><span class="header-section-number">5</span> Training the Data</h2>
+<p>Let’s train the data using each model.</p>
+<section id="logistic-regression-1" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="logistic-regression-1"><span class="header-section-number">5.1</span> Logistic Regression</h3>
+<div id="cell-29" class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>cols_LR <span class="op">=</span> best_score_LR[<span class="dv">0</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> warnings.catch_warnings():</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    warnings.simplefilter(<span class="st">"ignore"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    LR.fit(X_train[cols_LR], y_train)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    score_LR <span class="op">=</span> LR.score(X_train[cols_LR], y_train)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>score_LR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="63">
 <pre><code>0.99609375</code></pre>
 </div>
 </div>
 <p>So, using logistic regression on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Island</code> has a training accuracy of <strong>&gt;99.6%</strong>.</p>
 </section>
-<section id="random-forest-classifier-1" class="level3">
-<h3 class="anchored" data-anchor-id="random-forest-classifier-1">Random Forest Classifier</h3>
-<div id="cell-26" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cols_RFC <span class="op">=</span> best_score_RFC[<span class="dv">0</span>]</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>RFC.fit(X_train[cols_RFC], y_train)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>RFC.score(X_train[cols_RFC], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="45">
+<section id="random-forest-classifier-1" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="random-forest-classifier-1"><span class="header-section-number">5.2</span> Random Forest Classifier</h3>
+<div id="cell-31" class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cols_RFC <span class="op">=</span> best_score_RFC[<span class="dv">0</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>RFC.fit(X_train[cols_RFC], y_train)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>RFC.score(X_train[cols_RFC], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="64">
 <pre><code>1.0</code></pre>
 </div>
 </div>
 <p>So, using the random forest classifier on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>100%</strong>.</p>
 </section>
-<section id="decision-tree-classifier-1" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier-1">Decision Tree Classifier</h3>
-<div id="cell-28" class="cell" data-execution_count="46">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cols_DTC <span class="op">=</span> best_score_DTC[<span class="dv">0</span>]</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>DTC <span class="op">=</span> DecisionTreeClassifier(max_depth <span class="op">=</span> best_d)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>DTC.fit(X_train[cols_DTC], y_train)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>DTC.score(X_train[cols_DTC], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="46">
+<section id="decision-tree-classifier-1" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="decision-tree-classifier-1"><span class="header-section-number">5.3</span> Decision Tree Classifier</h3>
+<div id="cell-33" class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cols_DTC <span class="op">=</span> best_score_DTC[<span class="dv">0</span>]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>DTC <span class="op">=</span> DecisionTreeClassifier(max_depth <span class="op">=</span> best_d)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>DTC.fit(X_train[cols_DTC], y_train)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>DTC.score(X_train[cols_DTC], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="65">
 <pre><code>1.0</code></pre>
 </div>
 </div>
 <p>So, using the decision tree classifier on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>98.8%</strong>.</p>
 </section>
-<section id="support-vector-machine-1" class="level3">
-<h3 class="anchored" data-anchor-id="support-vector-machine-1">Support Vector Machine</h3>
-<div id="cell-30" class="cell" data-execution_count="47">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cols_SVM <span class="op">=</span> best_score_SVM[<span class="dv">0</span>]</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>SVM <span class="op">=</span> SVC(gamma <span class="op">=</span> best_g)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>SVM.fit(X_train[cols_SVM], y_train)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>SVM.score(X_train[cols_SVM], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="47">
+<section id="support-vector-machine-1" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="support-vector-machine-1"><span class="header-section-number">5.4</span> Support Vector Machine</h3>
+<div id="cell-35" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cols_SVM <span class="op">=</span> best_score_SVM[<span class="dv">0</span>]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>SVM <span class="op">=</span> SVC(gamma <span class="op">=</span> best_g)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>SVM.fit(X_train[cols_SVM], y_train)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>SVM.score(X_train[cols_SVM], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="66">
 <pre><code>0.9921875</code></pre>
 </div>
 </div>
 <p>So, using the support vector machine on <code>Culmen Length (mm)</code>, <code>Culmen Depth (mm)</code>, and <code>Sex</code> has a training accuracy of <strong>&gt;99.2%</strong>.</p>
 </section>
 </section>
-<section id="plotting-training-decision-regions" class="level2">
-<h2 class="anchored" data-anchor-id="plotting-training-decision-regions">Plotting Training Decision Regions</h2>
-<section id="logisitic-regression" class="level3">
-<h3 class="anchored" data-anchor-id="logisitic-regression">Logisitic Regression</h3>
-<div id="cell-32" class="cell" data-execution_count="48">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plot_regions(LR, X_train[cols_LR], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+<section id="plotting-training-decision-regions" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="plotting-training-decision-regions"><span class="header-section-number">6</span> Plotting Training Decision Regions</h2>
+<p>Let’s plot the decision regions for each model.</p>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_regions(LR, X_train[cols_LR], y_train)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plot_regions(RFC, X_train[cols_RFC], y_train)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plot_regions(DTC, X_train[cols_DTC], y_train)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plot_regions(SVM, X_train[cols_SVM], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="fig-decision" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decision-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-decision" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-decision-1" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-decision-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="penguins_files/figure-html/fig-decision-output-1.png" class="img-fluid figure-img" data-ref-parent="fig-decision">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-decision-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Logistic Regression
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-decision" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-decision-2" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-decision-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="penguins_files/figure-html/fig-decision-output-2.png" class="img-fluid figure-img" data-ref-parent="fig-decision">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-decision-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Random Forest
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="random-forest-walk-classifer" class="level3">
-<h3 class="anchored" data-anchor-id="random-forest-walk-classifer">Random Forest Walk Classifer</h3>
-<div id="cell-34" class="cell" data-execution_count="49">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>plot_regions(RFC, X_train[cols_RFC], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-decision" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-decision-3" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-decision-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="penguins_files/figure-html/fig-decision-output-3.png" class="img-fluid figure-img" data-ref-parent="fig-decision">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-decision-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) Decision Tree
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-decision" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-decision-4" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-decision-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="penguins_files/figure-html/fig-decision-output-4.png" class="img-fluid figure-img" data-ref-parent="fig-decision">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-decision-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d) Support Vector Machine
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="decision-tree-classifier-2" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier-2">Decision Tree Classifier</h3>
-<div id="cell-36" class="cell" data-execution_count="50">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>plot_regions(DTC, X_train[cols_DTC], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Decision regions for logistic regression, RFC, DTC, and SVM.
+</figcaption>
 </figure>
 </div>
-</div>
-</div>
+<p>From these plots, we can see that the RFC, DTC, and SVM models are potentially overfitting on the training data. As a result, we will use the logistic regression model for the testing data.</p>
 </section>
-<section id="support-vector-machine-2" class="level3">
-<h3 class="anchored" data-anchor-id="support-vector-machine-2">Support Vector Machine</h3>
-<div id="cell-38" class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plot_regions(SVM, X_train[cols_SVM], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
-</figure>
+<section id="testing" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="testing"><span class="header-section-number">7</span> Testing</h2>
+<p>With our models trained, we can now test the logistic regression model on the test data pulled from <a href="https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/test.csv">here</a>.</p>
+<div id="cell-40" class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>test_url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/test.csv"</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.read_csv(test_url)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>test[<span class="st">'Species'</span>] <span class="op">=</span> test[<span class="st">'Species'</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.get(<span class="dv">0</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>X_test, y_test <span class="op">=</span> prepare_data(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-</section>
-</section>
-<section id="testing" class="level2">
-<h2 class="anchored" data-anchor-id="testing">Testing</h2>
-<p>With our models trained, we can now test the models on the test data pulled from <a href="https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/test.csv">here</a>.</p>
-<div id="cell-40" class="cell" data-execution_count="52">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>test_url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/test.csv"</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.read_csv(test_url)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>test[<span class="st">'Species'</span>] <span class="op">=</span> test[<span class="st">'Species'</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.get(<span class="dv">0</span>)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>X_test, y_test <span class="op">=</span> prepare_data(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="logistic-regression-2" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regression-2">Logistic Regression</h3>
-<div id="cell-42" class="cell" data-execution_count="53">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>LR.score(X_test[cols_LR], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="53">
+<section id="testing-score" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="testing-score"><span class="header-section-number">7.1</span> Testing Score</h3>
+<div id="cell-42" class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>LR.score(X_test[cols_LR], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="69">
 <pre><code>1.0</code></pre>
 </div>
 </div>
-<p>Logistic regression has a test score of <strong>100%</strong>! We have accomplished our objective, but let’s also look at the other models.</p>
+<p>Logistic regression has a test score of <strong>100%</strong> so we have accomplished our objective!</p>
 </section>
-<section id="random-forest-classifier-2" class="level3">
-<h3 class="anchored" data-anchor-id="random-forest-classifier-2">Random Forest Classifier</h3>
-<div id="cell-44" class="cell" data-execution_count="54">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>RFC.score(X_test[cols_RFC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="54">
-<pre><code>0.9852941176470589</code></pre>
-</div>
-</div>
-<p>The random forest classifier has a test score of about <strong>99.5%</strong>.</p>
-</section>
-<section id="decision-tree-classifier-3" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier-3">Decision Tree Classifier</h3>
-<div id="cell-46" class="cell" data-execution_count="55">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>DTC.score(X_test[cols_DTC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="55">
-<pre><code>0.9852941176470589</code></pre>
-</div>
-</div>
-<p>The decision tree classifier has a test score of about <strong>98.5%</strong> as well.</p>
-</section>
-<section id="support-vector-machine-classifier" class="level3">
-<h3 class="anchored" data-anchor-id="support-vector-machine-classifier">Support Vector Machine Classifier</h3>
-<div id="cell-48" class="cell" data-execution_count="56">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>SVM.score(X_test[cols_SVM], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="56">
-<pre><code>0.9852941176470589</code></pre>
-</div>
-</div>
-<p>The support vector machine also has a test score of about <strong>98.5%</strong>.</p>
-</section>
-</section>
-<section id="plotting-testing-decision-regions" class="level2">
-<h2 class="anchored" data-anchor-id="plotting-testing-decision-regions">Plotting Testing Decision Regions</h2>
-<p>Below are the decision regions on test data for each model.</p>
-<section id="logistic-regression-3" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regression-3">Logistic Regression</h3>
-<div id="cell-51" class="cell" data-execution_count="57">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>plot_regions(LR, X_test[cols_LR], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="decision-regions" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="decision-regions"><span class="header-section-number">7.2</span> Decision Regions</h3>
+<p>Now, let’s look at the decision regions of the logistic regression model for the test data.</p>
+<div id="cell-fig-test-decision" class="cell" data-execution_count="70">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plot_regions(LR, X_test[cols_LR], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-25-output-1.png" class="img-fluid figure-img"></p>
+<div id="fig-test-decision" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-test-decision-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="penguins_files/figure-html/fig-test-decision-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-test-decision-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Decision regions of the logistic regression model for the test data.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="random-forest-classifier-3" class="level3">
-<h3 class="anchored" data-anchor-id="random-forest-classifier-3">Random Forest Classifier</h3>
-<div id="cell-53" class="cell" data-execution_count="58">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>plot_regions(RFC, X_test[cols_RFC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-26-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
 </section>
-<section id="decision-tree-classifier-4" class="level3">
-<h3 class="anchored" data-anchor-id="decision-tree-classifier-4">Decision Tree Classifier</h3>
-<div id="cell-55" class="cell" data-execution_count="59">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>plot_regions(DTC, X_test[cols_DTC], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-27-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="support-vector-machine-3" class="level3">
-<h3 class="anchored" data-anchor-id="support-vector-machine-3">Support Vector Machine</h3>
-<div id="cell-57" class="cell" data-execution_count="60">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>plot_regions(SVM, X_test[cols_SVM], y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="penguins_files/figure-html/cell-28-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<section id="discussion" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="discussion"><span class="header-section-number">8</span> Discussion</h2>
+<p>This study experiemented with <code>scikit-learn's</code> logistic regression, random forest classifier, decision tree classifier, and support vector machine models to predict penguin species from the Palmer Penguins data set with 100% testing accuracy. After training the four models, the random forest and decision tree classifiers had a training accuracy of 100%, while the logistic regression and support vector machine models had a training accuracy of 99.6% an 99.2% respectively. However, when looking at the decision regions in <a href="#fig-decision" class="quarto-xref">Figure&nbsp;2</a>, we can see that the random forest and decision tree classifers and the support vector machine were potentially overfitting on the training data. As a result, I used the logistic regression model for the testing data and it successfully predicted the penguins’ species with 100% testing accuracy.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1341,25 +1390,64 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         }
       };
     }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
+      const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+      for (let i=0; i<annoteTargets.length; i++) {
+        const annoteTarget = annoteTargets[i];
+        const targetCell = annoteTarget.getAttribute("data-target-cell");
+        const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+        const contentFn = () => {
+          const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          if (content) {
+            const tipContent = content.cloneNode(true);
+            tipContent.classList.add("code-annotation-tip-content");
+            return tipContent.outerHTML;
           }
-        });
+        }
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          onShow: (instance) => {
+            selectCodeLines(instance.reference);
+            instance.reference.classList.add('code-annotation-active');
+            window.tippy.hideAll();
+          },
+          onHide: (instance) => {
+            unselectCodeLines();
+            instance.reference.classList.remove('code-annotation-active');
+          },
+          maxWidth: 300,
+          delay: [50, 0],
+          duration: [200, 0],
+          offset: [5, 10],
+          arrow: true,
+          appendTo: function(el) {
+            return el.parentElement.parentElement.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto',
+          placement: 'right',
+          popperOptions: {
+            modifiers: [
+            {
+              name: 'flip',
+              options: {
+                flipVariations: false, // true by default
+                allowedAutoPlacements: ['right'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                mainAxis: false,
+                altAxis: false
+              }
+            }
+            ]        
+          }      
+        };
+        window.tippy(annoteTarget, config); 
       }
   const findCites = (el) => {
     const parentEl = el.parentElement;

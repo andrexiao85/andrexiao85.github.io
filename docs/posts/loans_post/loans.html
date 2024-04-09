@@ -247,8 +247,8 @@ window.Quarto = {
 <figcaption>Image source: techfunnel.com</figcaption>
 </figure>
 </div>
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<section id="overview" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
 <p>This study attempts to optimize the maximum total expected profit from loans for an unknown bank. I will be trying to create an automated decision-making sytem that gives each prospective borrower a score and decides whether to give them a loan based on a threshold, <span class="math inline">\(t\)</span>, where each score, <span class="math inline">\(s_i\)</span>, of borrower, <span class="math inline">\(i\)</span>, is defined as <span id="eq-score"><span class="math display">\[s_i = \langle \mathbf{X}_i, \mathbf{w} \rangle \tag{1}\]</span></span> where <span class="math inline">\(\mathbf{X}_i\)</span> is the vector of features for borrower, <span class="math inline">\(i\)</span>, and <span class="math inline">\(\mathbf{w}\)</span> is the vector of weights for each feature. Using this, the goal is to find <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(t\)</span> which maximize the total expected profit per loan for the bank.</p>
 <p>To accomplish this, I use logistic regression to determine <span class="math inline">\(\mathbf{w}\)</span> and calculate the expected profit per loan for various <span class="math inline">\(t\)</span>-values. In this study, we assume that each loan is a 10-year loan and 75% of the interest is used to pay for operating costs such as employee salaries. We also assume that defaults occur after three years and the bank loses 70% of the principal. That is, <span id="eq-profit-cost"><span class="math display">\[\begin{align*}
     \textbf{profit} &amp;= \text{loan amount}\cdot(1+0.25\cdot\text{interest rate})^{10} - \text{loan amount} \\
@@ -257,8 +257,8 @@ window.Quarto = {
 <p>In the end, the expected profit per loan for the bank was $1714.51.</p>
 <p>Afterwards, I discuss the impact that the automated system has on different segments of the population of prospective borrowers. I explore how the system impacts different age groups, purposes for the loan request, and income levels. I find that it is easier for younger age groups to receive loans, harder to take out student loans and loans for ventures, and it is much easier for higher income-levels to receive loans under my system.</p>
 </section>
-<section id="preparing-the-training-data" class="level2">
-<h2 class="anchored" data-anchor-id="preparing-the-training-data">Preparing the Training Data</h2>
+<section id="preparing-the-training-data" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="preparing-the-training-data"><span class="header-section-number">2</span> Preparing the Training Data</h2>
 <div id="cell-2" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
@@ -287,7 +287,7 @@ window.Quarto = {
 <li><code>int_percent_income</code>: the amount of yearly interest as a proportion of the borrower’s income. Calculated as <code>int_percent_income = loan_percent_income * loan_int_rate</code>.</li>
 </ul>
 <p>I will also be changing <code>loan_int_rate</code> from a percentage to a fraction before calculating <code>int_percent_income</code>.</p>
-<div id="cell-4" class="cell" data-execution_count="35">
+<div id="cell-4" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data(df):</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2">2</button><span id="annotated-cell-2-2" class="code-annotation-target"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>    df_ <span class="op">=</span> df.copy()</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>    df_ <span class="op">=</span> df_.dropna()</span>
@@ -326,7 +326,7 @@ window.Quarto = {
 </dd>
 </dl>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -347,7 +347,6 @@ window.Quarto = {
 <th data-quarto-table-cell-role="th">cb_person_default_on_file</th>
 <th data-quarto-table-cell-role="th">cb_person_cred_hist_length</th>
 <th data-quarto-table-cell-role="th">int_percent_income</th>
-<th data-quarto-table-cell-role="th">age_group</th>
 </tr>
 </thead>
 <tbody>
@@ -360,13 +359,12 @@ window.Quarto = {
 <td>EDUCATION</td>
 <td>C</td>
 <td>11750</td>
-<td>1.347000e-19</td>
+<td>0.1347</td>
 <td>0</td>
 <td>0.12</td>
 <td>Y</td>
 <td>6</td>
-<td>1.616400e-20</td>
-<td>20-29</td>
+<td>0.016164</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2</td>
@@ -377,13 +375,12 @@ window.Quarto = {
 <td>EDUCATION</td>
 <td>A</td>
 <td>10000</td>
-<td>7.510000e-20</td>
+<td>0.0751</td>
 <td>0</td>
 <td>0.27</td>
 <td>N</td>
 <td>4</td>
-<td>2.027700e-20</td>
-<td>20-29</td>
+<td>0.020277</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">3</td>
@@ -394,13 +391,12 @@ window.Quarto = {
 <td>MEDICAL</td>
 <td>C</td>
 <td>1325</td>
-<td>1.287000e-19</td>
+<td>0.1287</td>
 <td>1</td>
 <td>0.05</td>
 <td>N</td>
 <td>4</td>
-<td>6.435000e-21</td>
-<td>20-29</td>
+<td>0.006435</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">4</td>
@@ -411,13 +407,12 @@ window.Quarto = {
 <td>HOMEIMPROVEMENT</td>
 <td>A</td>
 <td>15000</td>
-<td>9.630000e-20</td>
+<td>0.0963</td>
 <td>0</td>
 <td>0.28</td>
 <td>N</td>
 <td>10</td>
-<td>2.696400e-20</td>
-<td>20-29</td>
+<td>0.026964</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
@@ -428,13 +423,12 @@ window.Quarto = {
 <td>HOMEIMPROVEMENT</td>
 <td>D</td>
 <td>5500</td>
-<td>1.491000e-19</td>
+<td>0.1491</td>
 <td>1</td>
 <td>0.25</td>
 <td>N</td>
 <td>2</td>
-<td>3.727500e-20</td>
-<td>20-29</td>
+<td>0.037275</td>
 </tr>
 </tbody>
 </table>
@@ -443,8 +437,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="exploring-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="exploring-the-data">Exploring the Data</h2>
+<section id="exploring-the-data" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="exploring-the-data"><span class="header-section-number">3</span> Exploring the Data</h2>
 <p>Let’s first take a look at how the loan interest rate and the yearly interest amount as a proportion of income (loan percent of income) relates to whether or not a borrower will default. The reason this may be a good place to start is because it is intuitive to think that a higher interest rate could result in more defaults. Additionally, it is also intuitive to think that the larger the loan amount is compared to a person’s income, the chance of defaulting increases. So, we can put these ideas together and conclude that interest rates and the loan percent of income of income could be closely related to the chance of defaulting.</p>
 <div id="cell-fig-int-percent-income" class="cell" data-execution_count="3">
 <details class="code-fold">
@@ -458,13 +452,14 @@ window.Quarto = {
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                 x <span class="op">=</span> <span class="st">'loan_percent_income'</span>,</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                                 y <span class="op">=</span> <span class="st">'loan_int_rate'</span>,</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                 hue <span class="op">=</span> <span class="st">'loan_status'</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                 palette <span class="op">=</span> pltt)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>int_income_plt.<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">'Loan Percent of Income'</span>,</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                   ylabel <span class="op">=</span> <span class="st">'Loan Interest Rate'</span>,</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                   title <span class="op">=</span> <span class="st">'Interest Cost vs. Income'</span>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>int_income_plt.legend(title <span class="op">=</span> <span class="st">'Default'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                 palette <span class="op">=</span> pltt,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                 alpha <span class="op">=</span> <span class="fl">0.5</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>int_income_plt.<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">'Loan Percent of Income'</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                   ylabel <span class="op">=</span> <span class="st">'Loan Interest Rate'</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                   title <span class="op">=</span> <span class="st">'Interest Cost vs. Income'</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>int_income_plt.legend(title <span class="op">=</span> <span class="st">'Default'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-int-percent-income" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -944,8 +939,8 @@ Figure&nbsp;3: Loan intent and homeownership status by age group.
 <p>Then, comparing <code>age_group</code> with <code>loan_intent</code> (<a href="#fig-age-intent-home" class="quarto-xref">Figure&nbsp;3</a>), we can see that as borrowers get older, they spend more on <code>MEDICAL</code>. Yet despite spending the most on <code>MEDICAL</code>, 70-79 year olds have the lower default rates by far which contradicts our findings from <a href="#tbl-loan-intent" class="quarto-xref">Table&nbsp;1</a>. Additionally, there is no clear relationship between <code>age_group</code> and <code>person_home_ownership</code>.</p>
 <p>Therefore, we can most likely conclude that <code>age_group</code> is not a good predictor.</p>
 </section>
-<section id="finding-a-threshold" class="level2">
-<h2 class="anchored" data-anchor-id="finding-a-threshold">Finding a Threshold</h2>
+<section id="finding-a-threshold" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="finding-a-threshold"><span class="header-section-number">4</span> Finding a Threshold</h2>
 <p>Using our findings, I will attempt to find an optimal threshold which will maximize expected profit from loans for the bank. I will do this by finding the best features through a semi-exhaustive search, then using those features, for logistic regression. I will then use the coefficients from the trained model as my weight vector, <code>w</code>, to compute the score, <code>s</code>, for each borrower (<a href="#eq-score" class="quarto-xref">Equation&nbsp;1</a>).</p>
 <p>Lastly, I will test multiple thresholds to find the optimal threshold that maximizes expected profit per loan for the bank. The base profit to beat,assuming that the bank gives everyone loans, is $819.12.</p>
 <div id="cell-24" class="cell" data-execution_count="9">
@@ -1169,7 +1164,7 @@ Figure&nbsp;3: Loan intent and homeownership status by age group.
 </div>
 </div>
 <p>Now that the data is ready to be trained, I will first use my findings from <code>@fig-int-percent-income</code> as a starting point. My initial features will be <code>loan_int_rate</code>, <code>loan_percent_income</code>, and <code>int_percent_income</code>.</p>
-<div id="cell-30" class="cell" data-execution_count="36">
+<div id="cell-30" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="annotated-cell-11"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="annotated-cell-11-2"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1">1</button><span id="annotated-cell-11-3" class="code-annotation-target"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a>want_cols <span class="op">=</span> [<span class="st">'loan_int_rate'</span>, <span class="st">'loan_percent_income'</span>, <span class="st">'int_percent_income'</span>]</span>
@@ -1192,7 +1187,7 @@ Figure&nbsp;3: Loan intent and homeownership status by age group.
 </dd>
 </dl>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>0.8256407088706057</code></pre>
 </div>
 </div>
@@ -1257,9 +1252,9 @@ Figure&nbsp;3: Loan intent and homeownership status by age group.
 </div>
 </div>
 <p>Here’s what one such combination looks like.</p>
-<div id="cell-36" class="cell" data-execution_count="33">
+<div id="cell-36" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>all_cols[<span class="dv">123</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>['loan_int_rate',
  'loan_percent_income',
  'int_percent_income',
@@ -1421,8 +1416,8 @@ Figure&nbsp;4: Expected profit per loan for threshold <span class="math inline">
 </div>
 <p>It looks like the best threshold is approximately <code>4.72</code> and the max expected profit per loan is approximately <code>$1757.83</code>. With weights, <code>w</code>, and threshold <code>t</code>, I am now ready to test the model.</p>
 </section>
-<section id="evaluating-the-model-from-the-banks-perspective" class="level2">
-<h2 class="anchored" data-anchor-id="evaluating-the-model-from-the-banks-perspective">Evaluating the Model from the Bank’s Perspective</h2>
+<section id="evaluating-the-model-from-the-banks-perspective" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="evaluating-the-model-from-the-banks-perspective"><span class="header-section-number">5</span> Evaluating the Model from the Bank’s Perspective</h2>
 <p>First, we need to prepare our testing data. I use the same method as my training data.</p>
 <div id="cell-53" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/credit-risk/test.csv"</span></span>
@@ -1455,11 +1450,11 @@ Figure&nbsp;4: Expected profit per loan for threshold <span class="math inline">
 </div>
 <p>Using my model, the bank can expect to make about <code>$1714.51</code> per loan, slightly less than the training set.</p>
 </section>
-<section id="evaluating-the-model-from-the-borrowers-perspective" class="level2">
-<h2 class="anchored" data-anchor-id="evaluating-the-model-from-the-borrowers-perspective">Evaluating the Model from the Borrower’s Perspective</h2>
+<section id="evaluating-the-model-from-the-borrowers-perspective" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="evaluating-the-model-from-the-borrowers-perspective"><span class="header-section-number">6</span> Evaluating the Model from the Borrower’s Perspective</h2>
 <p>An important aspect of good machine learning models is fairness and minimal bias. I will be exploring the impact of my autonomous decision-making system on different segments of the population of borrowers by <code>age_group</code>, <code>loan_intent</code>, and <code>income_level</code>.</p>
-<section id="loans-by-age" class="level3">
-<h3 class="anchored" data-anchor-id="loans-by-age">Loans by Age</h3>
+<section id="loans-by-age" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="loans-by-age"><span class="header-section-number">6.1</span> Loans by Age</h3>
 <div id="cell-fig-loans-age" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1499,8 +1494,8 @@ Figure&nbsp;5: Expected loans by age group.
 </div>
 <p>From <a href="#fig-loans-age" class="quarto-xref">Figure&nbsp;5</a>, we can see that people older than 60 will have a much harder time getting a loan with only about 40% being approved of taking a loan.</p>
 </section>
-<section id="loan-intent" class="level3">
-<h3 class="anchored" data-anchor-id="loan-intent">Loan Intent</h3>
+<section id="loan-intent" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="loan-intent"><span class="header-section-number">6.2</span> Loan Intent</h3>
 <div class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1583,8 +1578,8 @@ Table&nbsp;4: Difference in actual and predicted loan rates by loan intent.
 <p>From <a href="#tbl-intent-diff" class="quarto-xref">Table&nbsp;4</a>, we can see <code>HOMEIMPROVEMENT</code> was the only <code>loan_intent</code> to receive an increase in loans. All other intents received fewer loans from my model. The two biggest decreases in loans were for <code>EDUCATION</code> and <code>VENTURE</code>.</p>
 <p>An important thing to note is the relatively small decrease in loans for <code>MEDICAL</code> despite the relatively large amount of defaults (<a href="#tbl-loan-intent" class="quarto-xref">Table&nbsp;1</a>). This is important because it would be unfair if those seeking medical attention could not recieve loans. I use unfair in the sense that bias against certain circumstances that are out of ones control is unfair. In the case of medical care, many illnesses or injuries are “random” and not entirely in ones control. Sometimes, unfortunate things and mistakes just happen. To be biased against those unable to pay for medical care themselves is unfair. For example, if a person develops cancer, is it fair if they are denied a loan simply because they have cancer and are more likely to default? No it is not. Everyone deserves a chance for medical care and banks should support the people in need of a loan for medical care with lower interest rates which could in turn lower default rates. As such, my model does a good job of being relatively unbiased towards <code>MEDICAL</code> loans.</p>
 </section>
-<section id="income-levels" class="level3">
-<h3 class="anchored" data-anchor-id="income-levels">Income Levels</h3>
+<section id="income-levels" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="income-levels"><span class="header-section-number">6.3</span> Income Levels</h3>
 <div id="cell-fig-income-loans" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1628,8 +1623,8 @@ Figure&nbsp;6: Expected loans by income level.
 <p>From <a href="#fig-income-loans" class="quarto-xref">Figure&nbsp;6</a>, we can see that as income level increases, more prospective borrowers are approved for loans. This makes sense, since higher income individuals are more likely to pay back loans. However, it is a bit worrying that lower income individuals will have a hard time getting loans, since they may be the ones that need it the most.</p>
 </section>
 </section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<section id="summary" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="summary"><span class="header-section-number">7</span> Summary</h2>
 <p>In this study, I built an automated decision-making system for loans. I optimized the predicted expected profit per loan for the bank by giving each prospective borrower a score(<a href="#eq-score" class="quarto-xref">Equation&nbsp;1</a>) and then choosing a threshold to determine the borrowers that would receive a loan. Afterwards, I analyzed my model for biases by age group, loan intents, and income level.</p>
 <p>By using the features <code>loan_int_rate</code>, <code>loan_percent_income</code>, <code>int_percent_income</code>, and <code>person_home_ownership</code>, the model produced an expected ouput of about $1714.51. This surpasses the base profit by about $895.39, an approximately 209% increase in profit.</p>
 <p>Furthermore, analysis of my model showed that it approves fewer loans to prospective borrowers over the age of 60, borrowers who intend to take a loan for education and venture, and borrowers with lower income. I also specifically analyzed the impact my model had on borrowers who are intending to take a loan out for medical reasons and found that there was a slight, but not a significant drop in loans approved. Lastly, I discussed why my model would’ve been unfair for borrowers looking to receive a medical loan if my model had a bias against them.</p>
