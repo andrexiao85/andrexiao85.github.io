@@ -245,8 +245,8 @@ window.Quarto = {
 </figure>
 </div>
 <p>Perceptron Implementation: <a href="https://github.com/andrexiao85/andrexiao85.github.io/blob/main/posts/perceptron_post/perceptron.py">perceptron.py</a></p>
-<section id="abstract" class="level2">
-<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<section id="abstract" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="abstract"><span class="header-section-number">1</span> Abstract</h2>
 <p>This post implements the perceptron algorithm and minibatch perceptron algorithm and performs various experiments using both. For the simple perceptron algorithm, I run the following experiments:</p>
 <ol type="1">
 <li>Visualize the updates of the perceptron for linearly separable data and the final separating line.</li>
@@ -261,8 +261,8 @@ window.Quarto = {
 </ol>
 <p>At the end, I discuss the runtime complexity of a single iteration of both the regular perceptron alorithm and the minibatch perceptron algorithm.</p>
 </section>
-<section id="implementing-perceptron" class="level2">
-<h2 class="anchored" data-anchor-id="implementing-perceptron">Implementing Perceptron</h2>
+<section id="implementing-perceptron" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="implementing-perceptron"><span class="header-section-number">2</span> Implementing Perceptron</h2>
 <p>The perceptron algorithm aims to find a good choice of weights <span class="math inline">\(\mathbf{w}\)</span> that makes the loss small using the following algorithm:</p>
 <ol type="1">
 <li>Start with a <em>random</em> <span class="math inline">\(\mathbf{w}^{(0)}\)</span>.</li>
@@ -500,16 +500,16 @@ Figure&nbsp;2: The dotted lines represent the old decision boundaries and the so
 </div>
 <p>We can see that it eventually achieves <code>loss = 0</code> showing that my implementation was successful.</p>
 </section>
-<section id="experimentation-perceptron" class="level2">
-<h2 class="anchored" data-anchor-id="experimentation-perceptron">Experimentation: Perceptron</h2>
+<section id="experimentation-perceptron" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="experimentation-perceptron"><span class="header-section-number">3</span> Experimentation: Perceptron</h2>
 <p>For the regular perceptron, I will run the following experiments:</p>
 <ol type="1">
 <li>Visualize the updates of the perceptron for linearly separable data and the final separating line.</li>
 <li>Visualize the updates of the perceptron for not linearly separable data and the final boundary line in the final iteration since it does not converge.</li>
 <li>Visualize the loss of the perceptron for data with 5 feature and determine if it converges or not.</li>
 </ol>
-<section id="sec-p1" class="level3">
-<h3 class="anchored" data-anchor-id="sec-p1">P.1: Linearly Separable Data</h3>
+<section id="sec-p1" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="sec-p1"><span class="header-section-number">3.1</span> Linearly Separable Data</h3>
 <p>First, I generate a linearly separable data set with 50 points. Below is the plot of the data.</p>
 <div id="cell-fig-e1" class="cell" data-execution_count="6">
 <details class="code-fold">
@@ -555,8 +555,8 @@ Figure&nbsp;4: Updates for P.1.
 </div>
 <p>As we can see from the plots, the perceptron algorithm can sucessfully achieve <code>loss = 0</code> and found a separating line for linearly separable data.</p>
 </section>
-<section id="sec-p2" class="level3">
-<h3 class="anchored" data-anchor-id="sec-p2">P.2: Not Linearly Separable</h3>
+<section id="sec-p2" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="sec-p2"><span class="header-section-number">3.2</span> Not Linearly Separable</h3>
 <p>First, I will generate not linearly separable data with 50 points of data.</p>
 <div id="cell-fig-e2" class="cell" data-execution_count="8">
 <details class="code-fold">
@@ -611,8 +611,8 @@ Figure&nbsp;6: The decision boundary in the final iteration.
 </div>
 </div>
 </section>
-<section id="p.3-data-with-five-features" class="level3">
-<h3 class="anchored" data-anchor-id="p.3-data-with-five-features">P.3: Data with Five Features</h3>
+<section id="data-with-five-features" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="data-with-five-features"><span class="header-section-number">3.3</span> Data with Five Features</h3>
 <p>The perceptron algorithm should still work on data with more than two features. In this part, I will run the perceptron on data with five features.</p>
 <p>First, I will generate the necessary data.</p>
 <div id="cell-30" class="cell" data-execution_count="11">
@@ -655,89 +655,10 @@ Figure&nbsp;7: Loss over time for updates only.
 <p>Looking above, we can see that the perceptron algorithm achieved <code>loss = 0</code> meaning it successfully converged and found a separating line.</p>
 </section>
 </section>
-<section id="experimentation-minibatch-perceptron" class="level2">
-<h2 class="anchored" data-anchor-id="experimentation-minibatch-perceptron">Experimentation: Minibatch Perceptron</h2>
+<section id="experimentation-minibatch-perceptron" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="experimentation-minibatch-perceptron"><span class="header-section-number">4</span> Experimentation: Minibatch Perceptron</h2>
 <p>For the minibatch perceptron, I will be running the following experiments: 1. Visualize the updates of the perceptron with <code>k=1</code> and show that it performs similarly to the regular perceptron. 2. Visualize the updates of the perceptron with <code>k=10</code> and show it can still find a separating line in 2d. 3. Visualize the updates of the perceptorn with <code>k=n</code> and show that it can still converge even if the data is not linearly separable, provided that the learning rate <span class="math inline">\(\alpha\)</span> is not separable.</p>
-<p>Before starting experimentation, I need to write a training loop for the minibatch perceptron. It will be the similar to the regular perceptron training loop with some minor changes.</p>
-<div id="cell-36" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="annotated-cell-14"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-14-1"><a href="#annotated-cell-14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mb_training_loop(X, y, k <span class="op">=</span> <span class="dv">1</span>, alpha <span class="op">=</span> <span class="dv">1</span>, max_iters <span class="op">=</span> <span class="dv">1000</span>):</span>
-<span id="annotated-cell-14-2"><a href="#annotated-cell-14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-3"><a href="#annotated-cell-14-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> Perceptron() </span>
-<span id="annotated-cell-14-4"><a href="#annotated-cell-14-4" aria-hidden="true" tabindex="-1"></a>    opt <span class="op">=</span> PerceptronOptimizer(p) </span>
-<span id="annotated-cell-14-5"><a href="#annotated-cell-14-5" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(<span class="dv">1</span>)</span>
-<span id="annotated-cell-14-6"><a href="#annotated-cell-14-6" aria-hidden="true" tabindex="-1"></a>    p.loss(X, y) </span>
-<span id="annotated-cell-14-7"><a href="#annotated-cell-14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-8"><a href="#annotated-cell-14-8" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> X.size()[<span class="dv">0</span>] </span>
-<span id="annotated-cell-14-9"><a href="#annotated-cell-14-9" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="dv">1</span></span>
-<span id="annotated-cell-14-10"><a href="#annotated-cell-14-10" aria-hidden="true" tabindex="-1"></a>    loss_vec <span class="op">=</span> []</span>
-<span id="annotated-cell-14-11"><a href="#annotated-cell-14-11" aria-hidden="true" tabindex="-1"></a>    old_w_vec <span class="op">=</span> []</span>
-<span id="annotated-cell-14-12"><a href="#annotated-cell-14-12" aria-hidden="true" tabindex="-1"></a>    p_w <span class="op">=</span> []</span>
-<span id="annotated-cell-14-13"><a href="#annotated-cell-14-13" aria-hidden="true" tabindex="-1"></a>    local_loss_vec <span class="op">=</span> []</span>
-<span id="annotated-cell-14-14"><a href="#annotated-cell-14-14" aria-hidden="true" tabindex="-1"></a>    ix_vec <span class="op">=</span> []</span>
-<span id="annotated-cell-14-15"><a href="#annotated-cell-14-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="annotated-cell-14-16"><a href="#annotated-cell-14-16" aria-hidden="true" tabindex="-1"></a>    iters <span class="op">=</span> <span class="dv">0</span></span>
-<span id="annotated-cell-14-17"><a href="#annotated-cell-14-17" aria-hidden="true" tabindex="-1"></a>    updates <span class="op">=</span> <span class="dv">0</span></span>
-<span id="annotated-cell-14-18"><a href="#annotated-cell-14-18" aria-hidden="true" tabindex="-1"></a>    seed <span class="op">=</span> <span class="dv">1</span></span>
-<span id="annotated-cell-14-19"><a href="#annotated-cell-14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-20"><a href="#annotated-cell-14-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> loss <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> iters <span class="op">&lt;</span> max_iters:</span>
-<span id="annotated-cell-14-21"><a href="#annotated-cell-14-21" aria-hidden="true" tabindex="-1"></a>        old_w <span class="op">=</span> torch.clone(p.w)</span>
-<span id="annotated-cell-14-22"><a href="#annotated-cell-14-22" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="annotated-cell-14-23"><a href="#annotated-cell-14-23" aria-hidden="true" tabindex="-1"></a>        torch.manual_seed(seed)</span>
-<span id="annotated-cell-14-24"><a href="#annotated-cell-14-24" aria-hidden="true" tabindex="-1"></a>        </span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="1">1</button><span id="annotated-cell-14-25" class="code-annotation-target"><a href="#annotated-cell-14-25" aria-hidden="true" tabindex="-1"></a>        ix <span class="op">=</span> torch.randperm(X.size(<span class="dv">0</span>))[:k]</span>
-<span id="annotated-cell-14-26"><a href="#annotated-cell-14-26" aria-hidden="true" tabindex="-1"></a>        x_ix <span class="op">=</span> X[ix,:]</span>
-<span id="annotated-cell-14-27"><a href="#annotated-cell-14-27" aria-hidden="true" tabindex="-1"></a>        y_ix <span class="op">=</span> y[ix]</span>
-<span id="annotated-cell-14-28"><a href="#annotated-cell-14-28" aria-hidden="true" tabindex="-1"></a>        local_loss <span class="op">=</span> opt.mbstep(x_ix, y_ix, k <span class="op">=</span> k, alpha <span class="op">=</span> alpha)</span>
-<span id="annotated-cell-14-29"><a href="#annotated-cell-14-29" aria-hidden="true" tabindex="-1"></a>        seed <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="annotated-cell-14-30"><a href="#annotated-cell-14-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-31"><a href="#annotated-cell-14-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> local_loss <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="annotated-cell-14-32"><a href="#annotated-cell-14-32" aria-hidden="true" tabindex="-1"></a>            local_loss_vec.append(local_loss)</span>
-<span id="annotated-cell-14-33"><a href="#annotated-cell-14-33" aria-hidden="true" tabindex="-1"></a>            ix_vec.append(ix)</span>
-<span id="annotated-cell-14-34"><a href="#annotated-cell-14-34" aria-hidden="true" tabindex="-1"></a>            old_w_vec.append(old_w)</span>
-<span id="annotated-cell-14-35"><a href="#annotated-cell-14-35" aria-hidden="true" tabindex="-1"></a>            p_w.append(torch.clone(p.w))</span>
-<span id="annotated-cell-14-36"><a href="#annotated-cell-14-36" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> p.loss(X, y).item()</span>
-<span id="annotated-cell-14-37"><a href="#annotated-cell-14-37" aria-hidden="true" tabindex="-1"></a>            loss_vec.append(loss)</span>
-<span id="annotated-cell-14-38"><a href="#annotated-cell-14-38" aria-hidden="true" tabindex="-1"></a>            updates <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="annotated-cell-14-39"><a href="#annotated-cell-14-39" aria-hidden="true" tabindex="-1"></a>        iters <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="annotated-cell-14-40"><a href="#annotated-cell-14-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> iters <span class="op">&gt;=</span> max_iters:</span>
-<span id="annotated-cell-14-41"><a href="#annotated-cell-14-41" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">'Max iterations reached.'</span>)</span>
-<span id="annotated-cell-14-42"><a href="#annotated-cell-14-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-43"><a href="#annotated-cell-14-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ix_vec, loss_vec, old_w_vec, p_w, local_loss_vec, updates</span>
-<span id="annotated-cell-14-44"><a href="#annotated-cell-14-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-45"><a href="#annotated-cell-14-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mb_plot_updates(X, y, ix_vec, loss_vec, local_loss, old_w, p_w):</span>
-<span id="annotated-cell-14-46"><a href="#annotated-cell-14-46" aria-hidden="true" tabindex="-1"></a>    updates <span class="op">=</span> <span class="bu">len</span>(loss_vec)</span>
-<span id="annotated-cell-14-47"><a href="#annotated-cell-14-47" aria-hidden="true" tabindex="-1"></a>    rows, cols <span class="op">=</span> plot_dims(updates)</span>
-<span id="annotated-cell-14-48"><a href="#annotated-cell-14-48" aria-hidden="true" tabindex="-1"></a>    plt.rcParams[<span class="st">"figure.figsize"</span>] <span class="op">=</span> (cols<span class="op">*</span><span class="dv">2</span>, rows<span class="op">*</span><span class="dv">2</span>)</span>
-<span id="annotated-cell-14-49"><a href="#annotated-cell-14-49" aria-hidden="true" tabindex="-1"></a>    fig, axarr <span class="op">=</span> plt.subplots(rows, cols, sharex <span class="op">=</span> <span class="va">True</span>, sharey <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="annotated-cell-14-50"><a href="#annotated-cell-14-50" aria-hidden="true" tabindex="-1"></a>    markers <span class="op">=</span> [<span class="st">"o"</span>, <span class="st">","</span>]</span>
-<span id="annotated-cell-14-51"><a href="#annotated-cell-14-51" aria-hidden="true" tabindex="-1"></a>    marker_map <span class="op">=</span> {<span class="op">-</span><span class="dv">1</span> : <span class="dv">0</span>, <span class="dv">1</span> : <span class="dv">1</span>}</span>
-<span id="annotated-cell-14-52"><a href="#annotated-cell-14-52" aria-hidden="true" tabindex="-1"></a>    current_ax <span class="op">=</span> <span class="dv">0</span></span>
-<span id="annotated-cell-14-53"><a href="#annotated-cell-14-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-54"><a href="#annotated-cell-14-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(updates):</span>
-<span id="annotated-cell-14-55"><a href="#annotated-cell-14-55" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> axarr.ravel()[current_ax]</span>
-<span id="annotated-cell-14-56"><a href="#annotated-cell-14-56" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> ix_vec[j]</span>
-<span id="annotated-cell-14-57"><a href="#annotated-cell-14-57" aria-hidden="true" tabindex="-1"></a>        plot_perceptron_data(X, y, ax)</span>
-<span id="annotated-cell-14-58"><a href="#annotated-cell-14-58" aria-hidden="true" tabindex="-1"></a>        draw_line(old_w[j], x_min <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, x_max <span class="op">=</span> <span class="dv">2</span>, ax <span class="op">=</span> ax, color <span class="op">=</span> <span class="st">"black"</span>, linestyle <span class="op">=</span> <span class="st">"dashed"</span>)</span>
-<span id="annotated-cell-14-59"><a href="#annotated-cell-14-59" aria-hidden="true" tabindex="-1"></a>        draw_line(p_w[j], x_min <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, x_max <span class="op">=</span> <span class="dv">2</span>, ax <span class="op">=</span> ax, color <span class="op">=</span> <span class="st">"black"</span>)</span>
-<span id="annotated-cell-14-60"><a href="#annotated-cell-14-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> k <span class="kw">in</span> i:</span>
-<span id="annotated-cell-14-61"><a href="#annotated-cell-14-61" aria-hidden="true" tabindex="-1"></a>            ax.scatter(X[k,<span class="dv">0</span>],X[k,<span class="dv">1</span>], color <span class="op">=</span> <span class="st">"black"</span>, facecolors <span class="op">=</span> <span class="st">"none"</span>, edgecolors <span class="op">=</span> <span class="st">"black"</span>, marker <span class="op">=</span> markers[marker_map[y[k].item()]])</span>
-<span id="annotated-cell-14-62"><a href="#annotated-cell-14-62" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="ss">f"loss = </span><span class="sc">{</span>loss_vec[j]<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="annotated-cell-14-63"><a href="#annotated-cell-14-63" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(xlim <span class="op">=</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>), ylim <span class="op">=</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="annotated-cell-14-64"><a href="#annotated-cell-14-64" aria-hidden="true" tabindex="-1"></a>        current_ax <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="annotated-cell-14-65"><a href="#annotated-cell-14-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-14-66"><a href="#annotated-cell-14-66" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-annotation">
-<dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="25,26,27,28" data-code-annotation="1">Makes optimization step using <span class="math inline">\(k\)</span> random points.</span>
-</dd>
-</dl>
-</div>
-</div>
-<section id="mb.1-k-1" class="level3">
-<h3 class="anchored" data-anchor-id="mb.1-k-1">MB.1: <code>k = 1</code></h3>
-<p>For this first experimentation, we want to show that the minibatch perceptron performs similarly to the regular perceptron. To do that, I will use the same data from <a href="@sec-p1">P.1</a> to compare results for linearly separable data and the same data from <a href="@sec-p2">P.2</a> for not linearly separable data.</p>
+<p>For the experiments, I will be using the data from <a href="#sec-p1" class="quarto-xref">Section&nbsp;3.1</a> and <a href="#sec-p2" class="quarto-xref">Section&nbsp;3.2</a>.</p>
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> X1.size()[<span class="dv">0</span>]</span>
@@ -759,7 +680,7 @@ Figure&nbsp;7: Loss over time for updates only.
 <img src="perceptron_post_files/figure-html/fig-mb1-output-1.png" class="img-fluid figure-img" data-ref-parent="fig-mb1">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mb1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) Linearly separable data from P.1.
+(a) Linearly separable data from <a href="#sec-p1" class="quarto-xref">Section&nbsp;3.1</a>.
 </figcaption>
 </figure>
 </div>
@@ -771,7 +692,7 @@ Figure&nbsp;7: Loss over time for updates only.
 <img src="perceptron_post_files/figure-html/fig-mb1-output-2.png" class="img-fluid figure-img" data-ref-parent="fig-mb1">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mb1-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) Not linearly separable data from P.2
+(b) Not linearly separable data from <a href="#sec-p2" class="quarto-xref">Section&nbsp;3.2</a>.
 </figcaption>
 </figure>
 </div>
@@ -779,10 +700,90 @@ Figure&nbsp;7: Loss over time for updates only.
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mb1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: Previous data from P.1 and P.2.
+Figure&nbsp;8: Plots of data to be used.
 </figcaption>
 </figure>
 </div>
+<p>Before starting experimentation, I need to write a training loop for the minibatch perceptron. It will be the similar to the regular perceptron training loop with some minor changes.</p>
+<div id="cell-38" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="annotated-cell-15"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-15-1"><a href="#annotated-cell-15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mb_training_loop(X, y, k <span class="op">=</span> <span class="dv">1</span>, alpha <span class="op">=</span> <span class="dv">1</span>, max_iters <span class="op">=</span> <span class="dv">1000</span>):</span>
+<span id="annotated-cell-15-2"><a href="#annotated-cell-15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-3"><a href="#annotated-cell-15-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> Perceptron() </span>
+<span id="annotated-cell-15-4"><a href="#annotated-cell-15-4" aria-hidden="true" tabindex="-1"></a>    opt <span class="op">=</span> PerceptronOptimizer(p) </span>
+<span id="annotated-cell-15-5"><a href="#annotated-cell-15-5" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(<span class="dv">1</span>)</span>
+<span id="annotated-cell-15-6"><a href="#annotated-cell-15-6" aria-hidden="true" tabindex="-1"></a>    p.loss(X, y) </span>
+<span id="annotated-cell-15-7"><a href="#annotated-cell-15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-8"><a href="#annotated-cell-15-8" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> X.size()[<span class="dv">0</span>] </span>
+<span id="annotated-cell-15-9"><a href="#annotated-cell-15-9" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-15-10"><a href="#annotated-cell-15-10" aria-hidden="true" tabindex="-1"></a>    loss_vec <span class="op">=</span> []</span>
+<span id="annotated-cell-15-11"><a href="#annotated-cell-15-11" aria-hidden="true" tabindex="-1"></a>    old_w_vec <span class="op">=</span> []</span>
+<span id="annotated-cell-15-12"><a href="#annotated-cell-15-12" aria-hidden="true" tabindex="-1"></a>    p_w <span class="op">=</span> []</span>
+<span id="annotated-cell-15-13"><a href="#annotated-cell-15-13" aria-hidden="true" tabindex="-1"></a>    local_loss_vec <span class="op">=</span> []</span>
+<span id="annotated-cell-15-14"><a href="#annotated-cell-15-14" aria-hidden="true" tabindex="-1"></a>    ix_vec <span class="op">=</span> []</span>
+<span id="annotated-cell-15-15"><a href="#annotated-cell-15-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="annotated-cell-15-16"><a href="#annotated-cell-15-16" aria-hidden="true" tabindex="-1"></a>    iters <span class="op">=</span> <span class="dv">0</span></span>
+<span id="annotated-cell-15-17"><a href="#annotated-cell-15-17" aria-hidden="true" tabindex="-1"></a>    updates <span class="op">=</span> <span class="dv">0</span></span>
+<span id="annotated-cell-15-18"><a href="#annotated-cell-15-18" aria-hidden="true" tabindex="-1"></a>    seed <span class="op">=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-15-19"><a href="#annotated-cell-15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-20"><a href="#annotated-cell-15-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> loss <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> iters <span class="op">&lt;</span> max_iters:</span>
+<span id="annotated-cell-15-21"><a href="#annotated-cell-15-21" aria-hidden="true" tabindex="-1"></a>        old_w <span class="op">=</span> torch.clone(p.w)</span>
+<span id="annotated-cell-15-22"><a href="#annotated-cell-15-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="annotated-cell-15-23"><a href="#annotated-cell-15-23" aria-hidden="true" tabindex="-1"></a>        torch.manual_seed(seed)</span>
+<span id="annotated-cell-15-24"><a href="#annotated-cell-15-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1">1</button><span id="annotated-cell-15-25" class="code-annotation-target"><a href="#annotated-cell-15-25" aria-hidden="true" tabindex="-1"></a>        ix <span class="op">=</span> torch.randperm(X.size(<span class="dv">0</span>))[:k]</span>
+<span id="annotated-cell-15-26"><a href="#annotated-cell-15-26" aria-hidden="true" tabindex="-1"></a>        x_ix <span class="op">=</span> X[ix,:]</span>
+<span id="annotated-cell-15-27"><a href="#annotated-cell-15-27" aria-hidden="true" tabindex="-1"></a>        y_ix <span class="op">=</span> y[ix]</span>
+<span id="annotated-cell-15-28"><a href="#annotated-cell-15-28" aria-hidden="true" tabindex="-1"></a>        local_loss <span class="op">=</span> opt.mbstep(x_ix, y_ix, k <span class="op">=</span> k, alpha <span class="op">=</span> alpha)</span>
+<span id="annotated-cell-15-29"><a href="#annotated-cell-15-29" aria-hidden="true" tabindex="-1"></a>        seed <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-15-30"><a href="#annotated-cell-15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-31"><a href="#annotated-cell-15-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> local_loss <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="annotated-cell-15-32"><a href="#annotated-cell-15-32" aria-hidden="true" tabindex="-1"></a>            local_loss_vec.append(local_loss)</span>
+<span id="annotated-cell-15-33"><a href="#annotated-cell-15-33" aria-hidden="true" tabindex="-1"></a>            ix_vec.append(ix)</span>
+<span id="annotated-cell-15-34"><a href="#annotated-cell-15-34" aria-hidden="true" tabindex="-1"></a>            old_w_vec.append(old_w)</span>
+<span id="annotated-cell-15-35"><a href="#annotated-cell-15-35" aria-hidden="true" tabindex="-1"></a>            p_w.append(torch.clone(p.w))</span>
+<span id="annotated-cell-15-36"><a href="#annotated-cell-15-36" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> p.loss(X, y).item()</span>
+<span id="annotated-cell-15-37"><a href="#annotated-cell-15-37" aria-hidden="true" tabindex="-1"></a>            loss_vec.append(loss)</span>
+<span id="annotated-cell-15-38"><a href="#annotated-cell-15-38" aria-hidden="true" tabindex="-1"></a>            updates <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-15-39"><a href="#annotated-cell-15-39" aria-hidden="true" tabindex="-1"></a>        iters <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-15-40"><a href="#annotated-cell-15-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> iters <span class="op">&gt;=</span> max_iters:</span>
+<span id="annotated-cell-15-41"><a href="#annotated-cell-15-41" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">'Max iterations reached.'</span>)</span>
+<span id="annotated-cell-15-42"><a href="#annotated-cell-15-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-43"><a href="#annotated-cell-15-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ix_vec, loss_vec, old_w_vec, p_w, local_loss_vec, updates</span>
+<span id="annotated-cell-15-44"><a href="#annotated-cell-15-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-45"><a href="#annotated-cell-15-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mb_plot_updates(X, y, ix_vec, loss_vec, local_loss, old_w, p_w):</span>
+<span id="annotated-cell-15-46"><a href="#annotated-cell-15-46" aria-hidden="true" tabindex="-1"></a>    updates <span class="op">=</span> <span class="bu">len</span>(loss_vec)</span>
+<span id="annotated-cell-15-47"><a href="#annotated-cell-15-47" aria-hidden="true" tabindex="-1"></a>    rows, cols <span class="op">=</span> plot_dims(updates)</span>
+<span id="annotated-cell-15-48"><a href="#annotated-cell-15-48" aria-hidden="true" tabindex="-1"></a>    plt.rcParams[<span class="st">"figure.figsize"</span>] <span class="op">=</span> (cols<span class="op">*</span><span class="dv">2</span>, rows<span class="op">*</span><span class="dv">2</span>)</span>
+<span id="annotated-cell-15-49"><a href="#annotated-cell-15-49" aria-hidden="true" tabindex="-1"></a>    fig, axarr <span class="op">=</span> plt.subplots(rows, cols, sharex <span class="op">=</span> <span class="va">True</span>, sharey <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="annotated-cell-15-50"><a href="#annotated-cell-15-50" aria-hidden="true" tabindex="-1"></a>    markers <span class="op">=</span> [<span class="st">"o"</span>, <span class="st">","</span>]</span>
+<span id="annotated-cell-15-51"><a href="#annotated-cell-15-51" aria-hidden="true" tabindex="-1"></a>    marker_map <span class="op">=</span> {<span class="op">-</span><span class="dv">1</span> : <span class="dv">0</span>, <span class="dv">1</span> : <span class="dv">1</span>}</span>
+<span id="annotated-cell-15-52"><a href="#annotated-cell-15-52" aria-hidden="true" tabindex="-1"></a>    current_ax <span class="op">=</span> <span class="dv">0</span></span>
+<span id="annotated-cell-15-53"><a href="#annotated-cell-15-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-54"><a href="#annotated-cell-15-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(updates):</span>
+<span id="annotated-cell-15-55"><a href="#annotated-cell-15-55" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> axarr.ravel()[current_ax]</span>
+<span id="annotated-cell-15-56"><a href="#annotated-cell-15-56" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> ix_vec[j]</span>
+<span id="annotated-cell-15-57"><a href="#annotated-cell-15-57" aria-hidden="true" tabindex="-1"></a>        plot_perceptron_data(X, y, ax)</span>
+<span id="annotated-cell-15-58"><a href="#annotated-cell-15-58" aria-hidden="true" tabindex="-1"></a>        draw_line(old_w[j], x_min <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, x_max <span class="op">=</span> <span class="dv">2</span>, ax <span class="op">=</span> ax, color <span class="op">=</span> <span class="st">"black"</span>, linestyle <span class="op">=</span> <span class="st">"dashed"</span>)</span>
+<span id="annotated-cell-15-59"><a href="#annotated-cell-15-59" aria-hidden="true" tabindex="-1"></a>        draw_line(p_w[j], x_min <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, x_max <span class="op">=</span> <span class="dv">2</span>, ax <span class="op">=</span> ax, color <span class="op">=</span> <span class="st">"black"</span>)</span>
+<span id="annotated-cell-15-60"><a href="#annotated-cell-15-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> k <span class="kw">in</span> i:</span>
+<span id="annotated-cell-15-61"><a href="#annotated-cell-15-61" aria-hidden="true" tabindex="-1"></a>            ax.scatter(X[k,<span class="dv">0</span>],X[k,<span class="dv">1</span>], color <span class="op">=</span> <span class="st">"black"</span>, facecolors <span class="op">=</span> <span class="st">"none"</span>, edgecolors <span class="op">=</span> <span class="st">"black"</span>, marker <span class="op">=</span> markers[marker_map[y[k].item()]])</span>
+<span id="annotated-cell-15-62"><a href="#annotated-cell-15-62" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="ss">f"loss = </span><span class="sc">{</span>loss_vec[j]<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="annotated-cell-15-63"><a href="#annotated-cell-15-63" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(xlim <span class="op">=</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>), ylim <span class="op">=</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="annotated-cell-15-64"><a href="#annotated-cell-15-64" aria-hidden="true" tabindex="-1"></a>        current_ax <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-15-65"><a href="#annotated-cell-15-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-66"><a href="#annotated-cell-15-66" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="25,26,27,28" data-code-annotation="1">Makes optimization step using <span class="math inline">\(k\)</span> random points.</span>
+</dd>
+</dl>
+</div>
+</div>
+<section id="k-1" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="k-1"><span class="header-section-number">4.1</span> <code>k = 1</code></h3>
+<p>For this first experimentation, we want to show that the minibatch perceptron performs similarly to the regular perceptron. To do that, I will use the data from <a href="#fig-mb1-1" class="quarto-xref">Figure&nbsp;8 (a)</a> to compare results for linearly separable data and the data from <a href="#fig-mb1-2" class="quarto-xref">Figure&nbsp;8 (b)</a> for not linearly separable data.</p>
 <div id="cell-fig-mb1-result1" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
@@ -828,11 +829,11 @@ Figure&nbsp;10: Decision boundary during the final iteration.
 </div>
 </div>
 </div>
-<p>Comparing <a href="@fig-mb1-result1">Figure 9</a> to <a href="@fig-e1-updates">Figure 4</a> and <a href="@fig-mb1-result2">Figure 10</a> to <a href="@fig-e2-result">Figure 6</a>, we can see that the final decision boundary is the same which confirms that the minibatch perceptron performs similarly to the regular perceptron for <code>k = 1</code>.</p>
+<p>Comparing <a href="#fig-mb1-result1" class="quarto-xref">Figure&nbsp;9</a> to <a href="#fig-e1-updates" class="quarto-xref">Figure&nbsp;4</a> and <a href="#fig-mb1-result2" class="quarto-xref">Figure&nbsp;10</a> to <a href="#fig-e2-result" class="quarto-xref">Figure&nbsp;6</a>, we can see that the final decision boundary is the same which confirms that the minibatch perceptron performs similarly to the regular perceptron for <code>k = 1</code>.</p>
 </section>
-<section id="e.2-k-10" class="level3">
-<h3 class="anchored" data-anchor-id="e.2-k-10">E.2: <code>k = 10</code></h3>
-<p>To show that the minibatch perceptron will converge for <code>k = 10</code> for linearly separable data, I will once again use the data from <a href="@sec-p1">P.1</a>.</p>
+<section id="k-10" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="k-10"><span class="header-section-number">4.2</span> <code>k = 10</code></h3>
+<p>To show that the minibatch perceptron will converge for <code>k = 10</code> for linearly separable data, I will once again use the data from <a href="#fig-mb1-1" class="quarto-xref">Figure&nbsp;8 (a)</a>.</p>
 <div id="cell-fig-mb2-result" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
@@ -854,10 +855,10 @@ Figure&nbsp;11: Updates for <code>k = 10</code>.
 </div>
 <p>We can see that that it eventually achieves <code>loss = 0</code> meaning that the minibatch perceptron will converge for <code>k = 10</code>.</p>
 </section>
-<section id="e.3-k-n" class="level3">
-<h3 class="anchored" data-anchor-id="e.3-k-n">E.3: <code>k = n</code></h3>
-<p>To show that the minibatch perceptron will converge for <code>k = n</code> even if the data is not linearly separable, I use the data from <a href="@sec-p2">P.2</a> (<a href="@fig-mb1-b">Figure 8</a>). Even though it will not be able to achieve <code>loss = 0</code>, the <code>loss</code> should still even out at some <code>loss &lt; 0.5</code>.</p>
-<div id="cell-50" class="cell" data-execution_count="18">
+<section id="k-n" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="k-n"><span class="header-section-number">4.3</span> <code>k = n</code></h3>
+<p>To show that the minibatch perceptron will converge for <code>k = n</code> even if the data is not linearly separable, I use the data from <a href="#sec-p2" class="quarto-xref">Section&nbsp;3.2</a> (<a href="#fig-mb1-2" class="quarto-xref">Figure&nbsp;8 (b)</a>). Even though it will not be able to achieve <code>loss = 0</code>, the <code>loss</code> should still even out at some <code>loss &lt; 0.5</code>.</p>
+<div id="cell-51" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> X2.size()[<span class="dv">0</span>]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ix_vec, loss_vec, old_w, p_w, local_loss_vec, updates <span class="op">=</span> mb_training_loop(X2, y2, k <span class="op">=</span> n, alpha <span class="op">=</span> <span class="fl">0.001</span>, max_iters <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -914,14 +915,14 @@ Figure&nbsp;12: Results of MB.3.
 </figcaption>
 </figure>
 </div>
-<p>In <a href="@fig-mb3-b">Figure 12(b)</a>, we can see that the loss eventually drops down to about 0.32 which confirms that the minibatch perceptron will converge to some value <code>loss &lt; 0.5</code> for <code>k = n</code>.</p>
+<p>In <a href="#fig-mb3-2" class="quarto-xref">Figure&nbsp;12 (b)</a>, we can see that the loss eventually drops down to about 0.32 which confirms that the minibatch perceptron will converge to some value <code>loss &lt; 0.5</code> for <code>k = n</code>.</p>
 </section>
 </section>
-<section id="runtime-complexity" class="level2">
-<h2 class="anchored" data-anchor-id="runtime-complexity">Runtime Complexity</h2>
+<section id="runtime-complexity" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="runtime-complexity"><span class="header-section-number">5</span> Runtime Complexity</h2>
 <p>From these experiments, we can conclude that the minibatch perceptorn is more powerful than the regular perceptron. However, does it require more processing power and time to run the minibatch perceptron? More specifically, what are the runtime complexities for each iteration of both perceptron algorithms and are they dependent on the number of data points <span class="math inline">\(n\)</span> or the number of features <span class="math inline">\(p\)</span>?</p>
-<section id="perceptron" class="level3">
-<h3 class="anchored" data-anchor-id="perceptron">Perceptron</h3>
+<section id="perceptron" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="perceptron"><span class="header-section-number">5.1</span> Perceptron</h3>
 <p>To do this, let’s review the perceptron algorithms and the code implementation of them. Going back to the update equation for the perceptron, we have <span class="math display">\[\mathbf{w}^{(t+1)} =  \mathbf{w}^{(t)} + \mathbb{1}[s_i y_i &lt; 0]y_i\mathbf{x}_i.\]</span> where <span class="math display">\[s^{(t)}_i = \langle\mathbf{w}^{(t)}, \mathbf{x}_i\rangle.\]</span> To caclulate the score <span class="math inline">\(s_i^{(t)}\)</span>, we need to calculate the dot product for <span class="math inline">\(\mathbf{w}^{(t)}\)</span> and <span class="math inline">\(\mathbf{x}_i\)</span>. Given <span class="math inline">\(p\)</span> features, to calculate <span class="math inline">\(s_i\)</span>, the algorithm has a runtime complexity of <span class="math inline">\(O(p)\)</span>. Then going through the rest of the equation we get:</p>
 <ol type="1">
 <li><span class="math inline">\(s_i y_i \to O(p + n)\)</span></li>
@@ -931,14 +932,14 @@ Figure&nbsp;12: Results of MB.3.
 </ol>
 <p>So, the runtime complexity for the regular perceptron aglorithm is <span class="math inline">\(O(n + p)\)</span> meaning it is dependent on the number of data points <span class="math inline">\(n\)</span> and the number of features <span class="math inline">\(p\)</span>.</p>
 </section>
-<section id="minibatch-perceptron" class="level3">
-<h3 class="anchored" data-anchor-id="minibatch-perceptron">Minibatch Perceptron</h3>
+<section id="minibatch-perceptron" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="minibatch-perceptron"><span class="header-section-number">5.2</span> Minibatch Perceptron</h3>
 <p>For the minibatch perceptron, the update equation is defined as: <span class="math display">\[\mathbf{w}^{(t+1)} =  \mathbf{w}^{(t)} + \frac{\alpha}{k}\sum_{\ell=1}^k\mathbb{1}[s_{i_\ell} y_{i_\ell} &lt; 0]y_{i_\ell}\mathbf{x}_{i_\ell}.\]</span> Similar to <span class="math inline">\(s_i\)</span>, <span class="math inline">\(s_{i_\ell}\)</span> has a runtime complexity of <span class="math inline">\(O(n)\)</span> and likewise <span class="math inline">\((\mathbb{1}[s_{i_\ell} y_{i_\ell} &lt; 0]y_{i_\ell})\mathbf{x}_{i_\ell}\)</span> has runtime complexity <span class="math inline">\(O(2p + 3n) = O(p + n)\)</span>. We then do this <span class="math inline">\(k\)</span> times where <span class="math inline">\(k\)</span> is the number of randomly selected points. Assuming the worse case scenario of <span class="math inline">\(k = n\)</span>, we get a runtime complexity of <span class="math inline">\(O(np + n^2)\)</span>. Additionally, we must compute the sum of the resulting vectors for <span class="math inline">\(k=n\)</span> randomly selected points. Because each vector contains <span class="math inline">\(p\)</span> values and there are <span class="math inline">\(n\)</span> total vectors, the operation will have runtime complexity <span class="math inline">\(O(np)\)</span>. Then, the total runtime complexity is <span class="math inline">\(O(2np + n^2) = O(np + n^2)\)</span>.</p>
 <p>To summarize, the regular perceptorn has a runtime complexity of <span class="math inline">\(O(n + p)\)</span> and the minibatch perceptron has a runtime complexity of <span class="math inline">\(O(np + n^2)\)</span>. From this, we can see that though the minibatch perceptron is more powerful than the regular perceptorn but as a tradeoff, requires more processing power and time to run.</p>
 </section>
 </section>
-<section id="discussion" class="level2">
-<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<section id="discussion" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="discussion"><span class="header-section-number">6</span> Discussion</h2>
 <p>From the experiments with the perceptron, we found that it could converge to a separating line for linearly separable data with two or more features, but will not be able to converge for not linearly separable data. Then from the experiments with the minibatch perceptron, we found that it performed exactly the same as the regular perceptron when <code>k = 1</code> and <span class="math inline">\(\alpha = 1\)</span> when using the same dataset and starting <span class="math inline">\(\mathbf{w}\)</span>. That is, it found the same separating line with the same amount of updates for linearly separable data and the same decision boundary in the final iteration for not linearly separable data. This is due to the fact that the update to <span class="math inline">\(\mathbf{w}\)</span> for the minibatch perceptron becomes the same as the update to <span class="math inline">\(\mathbf{w}\)</span> for the regular perceptron when <code>k = 1</code> and <span class="math inline">\(\alpha = 1\)</span>. Additionally, we found that the minibatch perceptorn converges for <code>k = 10</code> for linearly separable data and it converges to a <code>loss &lt; 0.5</code> for not linearly separable when <code>k = n</code>.</p>
 <p>Comparing the two algorithms, we found that the minibatch perceptron is more powerful than the regular perceptron, but as a result, requires more processing time to run.</p>
 
