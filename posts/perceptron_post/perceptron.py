@@ -40,7 +40,7 @@ class LinearModel:
         RETURNS: 
             y_hat, torch.Tensor: vector predictions in {0.0, 1.0}. y_hat.size() = (n,)
         """
-        return 1 if self.score(X) > 0 else 0
+        return 1.0*(self.score(X) > 0)
 
 class Perceptron(LinearModel):
 
