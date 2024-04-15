@@ -238,6 +238,7 @@ window.Quarto = {
 
 
 
+<p>Referenced Code: <a href="https://github.com/andrexiao85/andrexiao85.github.io/blob/main/posts/logistic_post/logistic.py">logistic.py</a></p>
 <section id="abstract" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="abstract"><span class="header-section-number">1</span> Abstract</h2>
 <p>Logistic regression aims to minimize the empirical risk for a given data set by adjusting the weight vector <span class="math inline">\(\mathbf{w}\)</span> using gradient descent and momentum. In this study, I implement and experiment with logistic regression for binary classification. The first experiment uses logistic regression with vanilla gradient descent (<span class="math inline">\(\beta = 0\)</span>) and analyzes the loss over iterations and the final decision boundary. The second experiment applies logistic regression with momentum (<span class="math inline">\(\beta &gt; 0\)</span>) and compares its loss over iterations and final decision boundary with its vanilla counterpart. The last experiment analyzes overfitting when the number of features exceeds the number of data points in the data set. For each experiment, I will first generate classification data then run a training loop. For the first two experiments, I visualize the loss over iterations and the final decision boundaries, while for the last experiment, I compare the accuracy of the model for the training data to the testing data.</p>
@@ -438,7 +439,7 @@ Figure&nbsp;2: Vanilla gradient descent converges to a weight vector <span class
 <section id="benefits-of-momentum" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="benefits-of-momentum"><span class="header-section-number">3.2</span> Benefits of Momentum</h3>
 <p>Now, we’ll take a look at the benefits of momentum. Gradient descent with momentum (e.g.&nbsp;<span class="math inline">\(\beta = 0.9\)</span>) should converge to the correct weight vector in fewer iterations than vanilla gradient descent (<span class="math inline">\(\beta = 0\)</span>). For this experiment, let’s use <span class="math inline">\(\beta = 0.9\)</span>. The loss over iterations and decision boundaries for both are displayed below.</p>
-<div id="cell-fig-momentum" class="cell">
+<div id="cell-fig-momentum" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LR2 <span class="op">=</span> LogisticRegression()</span>
