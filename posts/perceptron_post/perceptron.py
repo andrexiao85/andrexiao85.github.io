@@ -62,31 +62,18 @@ class Perceptron(LinearModel):
         """
 
         # replace with your implementation
-        return (1.0*(self.score(X)*(2*y-1) <= 0)).mean()
-
-    def grad(self, X, y):
-        s = X@self.w
-        return (s*y < 0) * y*X
+        return (1.0*(self.score(X)*y <= 0)).mean()
     
-    def mbgrad(self, X, y, k = 2, alpha = 0.1):
-        s = X@self.w
-        return torch.sum(((s*y < 0) * y)[:, None] *X, 0) * alpha / k
+    def grad(self, X, y, alpha = 0.1):
+        s = self.score(X)
+        return (((s*y < 0) * y)[:, None] *X).mean(0) * alpha
 
 class PerceptronOptimizer:
 
     def __init__(self, model):
         self.model = model 
     
-    def step(self, X, y):
-        """
-        Compute one step of the perceptron update using the feature matrix X 
-        and target vector y. 
-        """
+    def step(self, X, y, alpha = 0.1):
         loss = self.model.loss(X, y)
-        self.model.w += self.model.grad(X, y)[0]
-        return loss
-    
-    def mbstep(self, X, y, k = 2, alpha = 0.1):
-        loss = self.model.loss(X, y)
-        self.model.w += self.model.mbgrad(X, y, k, alpha)
+        self.model.w += self.model.grad(X, y, alpha)
         return loss
