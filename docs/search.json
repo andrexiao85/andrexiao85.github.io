@@ -102,7 +102,7 @@
     "href": "posts/newton_post/newton_post.html",
     "title": "Newton’s Method for Logistic Regression",
     "section": "",
-    "text": "A comparison of Newton’s method (red) and gradient descent (green). Image source: https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Newton_optimization_vs_grad_descent.svg/440px-Newton_optimization_vs_grad_descent.svg.png\nReferenced Code:"
+    "text": "A comparison of Newton’s method (red) and gradient descent (green). Image source: https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Newton_optimization_vs_grad_descent.svg/440px-Newton_optimization_vs_grad_descent.svg.png\nReferenced Code: logistic.py"
   },
   {
     "objectID": "posts/newton_post/newton_post.html#abstract",
