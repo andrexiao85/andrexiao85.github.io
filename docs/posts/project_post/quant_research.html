@@ -8,7 +8,7 @@
 
 <meta name="author" content="Andre Xiao, James Ohr, Donovan Wood">
 <meta name="dcterms.date" content="2024-05-16">
-<meta name="description" content="Final Project for CS451">
+<meta name="description" content="Building and testing an LSTM model for stock price prediction.">
 
 <title>CSCI 0451 Machine Learning - Quantitative Trading Model Using LSTM</title>
 <style>
@@ -223,7 +223,7 @@ window.Quarto = {
       <h1 class="title">Quantitative Trading Model Using LSTM</h1>
                   <div>
         <div class="description">
-          Final Project for CS451
+          Building and testing an LSTM model for stock price prediction.
         </div>
       </div>
                 </div>
@@ -261,6 +261,12 @@ window.Quarto = {
 
 
 
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://masterthecrypto.com/wp-content/uploads/2019/11/quantitative-trading.jpg" class="img-fluid figure-img"></p>
+<figcaption>Image source: https://masterthecrypto.com/wp-content/uploads/2019/11/quantitative-trading.jpg</figcaption>
+</figure>
+</div>
 <section id="abstract" class="level2">
 <h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
 <p>We applied machine learning methods to predict daily stock price movements in a basket of 10 US-listed energy companies. We found the most success using an LSTM model, achieving an accuracy of up to 61% on one stock (PSX). In line with prior literature, we compared our results to a benchmark established by a last value machine, which simply predicts the next day’s price to be the current day’s actual price. Comparing our LSTM results to our benchmark, we find mixed results. We achieve, on average, 53.5% accuracy vs.&nbsp;our benchmark’s 53% accuracy. For the ten companies in our analysis, our model has superior for accuracy for six companies, has equal accuracy for one company, and has worse accuracy for three companies compared to our last value benchmark. This superior accuracy leads to higher simulated portfolio returns using our model compared to our benchmarks.</p>
@@ -1044,9 +1050,9 @@ Figure&nbsp;2: A comparison of cumulative returns between our strategy returns, 
 </section>
 <section id="group-contributions-statement" class="level2">
 <h2 class="anchored" data-anchor-id="group-contributions-statement">Group Contributions Statement</h2>
-<p>Andre did research on RFE using logistic regression, random forest, and support vector machine before pivoting to an LSTM <a href="../../posts/project_post/axiao_research.html">axiao_research.ipynb</a>. He wrote the source code for the data preparation in <code>lstm_data.py</code>, the LSTM model in <code>lstm_model.py</code>, and the evaluation. He wrote the code for the plots for comparing cumulative returns and the code for calculating the accuracy of the strategy and the benchmarks.</p>
-<p>Donovan provided the initial research and the code for calculating the features <code>SMA_20</code>, <code>SMA_50</code>, <code>RSI</code>, <code>Z_Score</code>, and <code>Std_Dev</code>. He provided visualizations for the moving averages and performed inital tests using logistic regression in <a href="../../posts/project_post/dwood_test.html">dwood_test.ipynb</a>. He wrote the data section.</p>
-<p>James worked on an early analysis using Google Trends data in <a href="../../posts/project_post/prelim-analysis.html">prelim-analysis.ipynb</a>, which we pivoted away from after realizing the limited supply of daily data. He created the presentation and wrote the abstract, the introduction, the values, and the conclusion sections. He also wrote the code to calculate the correlation coefficients between predicted prices and actual prices.</p>
+<p>Andre did research on RFE using logistic regression, random forest, and support vector machine before pivoting to an LSTM <a href="https://github.com/andrexiao85/andrexiao85.github.io/blob/main/posts/project_post/axiao_research.ipynb">axiao_research.ipynb</a>. He wrote the source code for the data preparation in <code>lstm_data.py</code>, the LSTM model in <code>lstm_model.py</code>, and the evaluation. He wrote the code for the plots for comparing cumulative returns and the code for calculating the accuracy of the strategy and the benchmarks.</p>
+<p>Donovan provided the initial research and the code for calculating the features <code>SMA_20</code>, <code>SMA_50</code>, <code>RSI</code>, <code>Z_Score</code>, and <code>Std_Dev</code>. He provided visualizations for the moving averages and performed inital tests using logistic regression in <a href="https://github.com/andrexiao85/andrexiao85.github.io/blob/main/posts/project_post/dwood_test.ipynb">dwood_test.ipynb</a>. He wrote the data section.</p>
+<p>James worked on an early analysis using Google Trends data in <a href="https://github.com/andrexiao85/andrexiao85.github.io/blob/main/posts/project_post/prelim-analysis.ipynb">prelim-analysis.ipynb</a>, which we pivoted away from after realizing the limited supply of daily data. He created the presentation and wrote the abstract, the introduction, the values, and the conclusion sections. He also wrote the code to calculate the correlation coefficients between predicted prices and actual prices.</p>
 </section>
 <section id="personal-reflection" class="level2">
 <h2 class="anchored" data-anchor-id="personal-reflection">Personal Reflection</h2>

@@ -142,6 +142,7 @@ def evaluate_lstm(model, X_test, y_test, X_scaler, y_scaler, features):
     lv_prediction_correl = X_test['Last_Value'].corr(X_test['Close'])
     print(f'{ticker} Accuracy: {accuracy}, Correlation: {prediction_correl}, Last Value Accuracy: {lv_accuracy}, Last Value Correlation: {lv_prediction_correl}')
 
+    # Below plots results for individual stocks
     # plot stock price
     # plt.figure(figsize=(10,5))
     # plt.plot(X_test['Predicted_Price'].shift(1), label='Predicted Price')
