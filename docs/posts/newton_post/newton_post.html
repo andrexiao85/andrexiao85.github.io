@@ -323,20 +323,16 @@ f(x) = f(x_k) + f'(x_k)(x-x_k) + \frac{1}{2}f''(x_k)(x-x_k)^2
 </section>
 <section id="experiments" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="experiments"><span class="header-section-number">3</span> Experiments</h2>
-<div id="cell-3" class="cell" data-execution_count="187">
+<div id="cell-3" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext autoreload</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>autoreload <span class="dv">2</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> logistic <span class="im">import</span> LogisticRegression, NewtonOptimizer, GradientDescentOptimizer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload</code></pre>
-</div>
 </div>
 <p>Below, I define some functions to help visualize my data and findings.</p>
-<div id="cell-5" class="cell" data-execution_count="188">
+<div id="cell-5" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -433,13 +429,13 @@ f(x) = f(x_k) + f'(x_k)(x-x_k) + \frac{1}{2}f''(x_k)(x-x_k)^2
 <section id="newtons-method-works" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="newtons-method-works"><span class="header-section-number">3.1</span> Newton’s Method Works</h3>
 <p>I will show that Newton’s method works given a small enough <span class="math inline">\(\alpha\)</span> by comparing it to standard gradient descent.</p>
-<div id="cell-fig-data" class="cell" data-execution_count="189">
+<div id="cell-fig-data" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">1</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> classification_data(n_points<span class="op">=</span><span class="dv">100</span>, noise <span class="op">=</span> <span class="fl">0.1</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plot_classification_data(X, y, ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> classification_data(n_points<span class="op">=</span><span class="dv">100</span>, noise <span class="op">=</span> <span class="fl">0.1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>plot_classification_data(X, y, ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-data" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -454,19 +450,20 @@ Figure&nbsp;1: 300 data points with <code>noise = 0.5</code> in 2 dimensions.
 </div>
 </div>
 </div>
-<div id="cell-fig-newton" class="cell" data-execution_count="194">
+<div id="cell-fig-newton" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LR1 <span class="op">=</span> LogisticRegression()</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>loss_vec_newton <span class="op">=</span> train_newton(LR1, X, y, alpha <span class="op">=</span> <span class="dv">1</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>LR2 <span class="op">=</span> LogisticRegression()</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>loss_vec_grad <span class="op">=</span> train_grad(LR2, X, y, alpha <span class="op">=</span> <span class="dv">1</span>, beta <span class="op">=</span> <span class="dv">0</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_newton)<span class="op">+</span><span class="dv">1</span>), loss_vec_newton, color <span class="op">=</span> <span class="st">"green"</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_grad)<span class="op">+</span><span class="dv">1</span>), loss_vec_grad, color<span class="op">=</span><span class="st">'blue'</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.semilogx()</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Gradient Descent Iterations"</span>, ylabel <span class="op">=</span> <span class="st">"Loss (Binary Cross Entropy)"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LR1 <span class="op">=</span> LogisticRegression()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>loss_vec_newton <span class="op">=</span> train_newton(LR1, X, y, alpha <span class="op">=</span> <span class="dv">1</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>LR2 <span class="op">=</span> LogisticRegression()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>loss_vec_grad <span class="op">=</span> train_grad(LR2, X, y, alpha <span class="op">=</span> <span class="dv">1</span>, beta <span class="op">=</span> <span class="dv">0</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_newton)<span class="op">+</span><span class="dv">1</span>), loss_vec_newton, color <span class="op">=</span> <span class="st">"green"</span>, label<span class="op">=</span><span class="st">"Newton's Method"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_grad)<span class="op">+</span><span class="dv">1</span>), loss_vec_grad, color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Gradient Descent'</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>plt.semilogx()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Iterations"</span>, ylabel <span class="op">=</span> <span class="st">"Loss (Binary Cross Entropy)"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-newton" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -487,13 +484,13 @@ Figure&nbsp;2: Loss over iterations.
 <section id="newtons-method-can-converge-faster" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="newtons-method-can-converge-faster"><span class="header-section-number">3.2</span> Newton’s Method Can Converge Faster</h3>
 <p>I’ll show that Newton’s method can converge faster than standard gradient descent under certain circumstances. In this case, I set <code>n_points=10</code> and <code>noise=0.9</code>.</p>
-<div id="cell-fig-data2" class="cell" data-execution_count="195">
+<div id="cell-fig-data2" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">1</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> classification_data(n_points<span class="op">=</span><span class="dv">10</span>, noise <span class="op">=</span> <span class="fl">0.9</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plot_classification_data(X, y, ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> classification_data(n_points<span class="op">=</span><span class="dv">10</span>, noise <span class="op">=</span> <span class="fl">0.9</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plot_classification_data(X, y, ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-data2" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -508,19 +505,18 @@ Figure&nbsp;3: 10 data points with <code>noise = 0.9</code> in 2 dimensions.
 </div>
 </div>
 </div>
-<div id="cell-fig-faster" class="cell" data-execution_count="199">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>LR3 <span class="op">=</span> LogisticRegression()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>loss_vec_newton <span class="op">=</span> train_newton(LR3, X, y, alpha <span class="op">=</span> <span class="fl">0.9</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>LR4 <span class="op">=</span> LogisticRegression()</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>loss_vec_grad <span class="op">=</span> train_grad(LR4, X, y, alpha <span class="op">=</span> <span class="fl">0.9</span>, beta <span class="op">=</span> <span class="dv">0</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_newton)<span class="op">+</span><span class="dv">1</span>), loss_vec_newton, color <span class="op">=</span> <span class="st">"green"</span>, label<span class="op">=</span><span class="st">"Newton's method"</span>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_grad)<span class="op">+</span><span class="dv">1</span>), loss_vec_grad, color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">"Gradient Descent"</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.semilogx()</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Gradient Descent Iterations"</span>, ylabel <span class="op">=</span> <span class="st">"Loss (Binary Cross Entropy)"</span>)<span class="op">;</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-fig-faster" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>LR3 <span class="op">=</span> LogisticRegression()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>loss_vec_newton <span class="op">=</span> train_newton(LR3, X, y, alpha <span class="op">=</span> <span class="fl">0.9</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>LR4 <span class="op">=</span> LogisticRegression()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>loss_vec_grad <span class="op">=</span> train_grad(LR4, X, y, alpha <span class="op">=</span> <span class="fl">0.9</span>, beta <span class="op">=</span> <span class="dv">0</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_newton)<span class="op">+</span><span class="dv">1</span>), loss_vec_newton, color <span class="op">=</span> <span class="st">"green"</span>, label<span class="op">=</span><span class="st">"Newton's Method"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_grad)<span class="op">+</span><span class="dv">1</span>), loss_vec_grad, color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">"Gradient Descent"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.semilogx()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Iterations"</span>, ylabel <span class="op">=</span> <span class="st">"Loss (Binary Cross Entropy)"</span>)<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="fig-faster" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -540,64 +536,23 @@ Figure&nbsp;4: Loss over iterations.
 <section id="newtons-method-might-not-converge" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="newtons-method-might-not-converge"><span class="header-section-number">3.3</span> Newton’s Method Might Not Converge</h3>
 <p>If <span class="math inline">\(\alpha\)</span> is too large, then Newton’s method might not converge. In this case, I use <code>alpha=20</code>.</p>
-<div id="cell-15" class="cell" data-execution_count="200">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>LR4 <span class="op">=</span> LogisticRegression()</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>loss_vec_newton <span class="op">=</span> train_newton(LR4, X, y, alpha <span class="op">=</span> <span class="dv">20</span>, iters <span class="op">=</span> <span class="dv">1000</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_newton)<span class="op">+</span><span class="dv">1</span>), loss_vec_newton, color <span class="op">=</span> <span class="st">"green"</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.semilogx()</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Gradient Descent Iterations"</span>, ylabel <span class="op">=</span> <span class="st">"Loss (Binary Cross Entropy)"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Unexpected exception formatting exception. Falling back to standard exception</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Traceback (most recent call last):
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/interactiveshell.py", line 3526, in run_code
-    exec(code_obj, self.user_global_ns, self.user_ns)
-  File "/var/folders/z3/mmqv83kn7gvb04yyy9l4n95w0000gn/T/ipykernel_49805/3982134260.py", line 2, in &lt;module&gt;
-    loss_vec_newton = train_newton(LR4, X, y, alpha = 20, iters = 1000)
-  File "/var/folders/z3/mmqv83kn7gvb04yyy9l4n95w0000gn/T/ipykernel_49805/1698099668.py", line 39, in train_newton
-    opt.step(X, y, alpha)
-  File "/Users/andrexiao/Documents/Spring 2024/Machine Learning/Projects/logistic.py", line 112, in step
-    self.model.w -= alpha * torch.linalg.inv(self.model.hessian(X))@self.model.grad(X, y)
-torch._C._LinAlgError: linalg.inv: The diagonal element 1 is zero, the inversion could not be completed because the input matrix is singular.
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/interactiveshell.py", line 2120, in showtraceback
-    stb = self.InteractiveTB.structured_traceback(
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/ultratb.py", line 1435, in structured_traceback
-    return FormattedTB.structured_traceback(
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/ultratb.py", line 1326, in structured_traceback
-    return VerboseTB.structured_traceback(
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/ultratb.py", line 1173, in structured_traceback
-    formatted_exception = self.format_exception_as_a_whole(etype, evalue, etb, number_of_lines_of_context,
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/ultratb.py", line 1088, in format_exception_as_a_whole
-    frames.append(self.format_record(record))
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/ultratb.py", line 970, in format_record
-    frame_info.lines, Colors, self.has_colors, lvals
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/IPython/core/ultratb.py", line 792, in lines
-    return self._sd.lines
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/stack_data/utils.py", line 145, in cached_property_wrapper
-    value = obj.__dict__[self.func.__name__] = self.func(obj)
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/stack_data/core.py", line 698, in lines
-    pieces = self.included_pieces
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/stack_data/utils.py", line 145, in cached_property_wrapper
-    value = obj.__dict__[self.func.__name__] = self.func(obj)
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/stack_data/core.py", line 649, in included_pieces
-    pos = scope_pieces.index(self.executing_piece)
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/stack_data/utils.py", line 145, in cached_property_wrapper
-    value = obj.__dict__[self.func.__name__] = self.func(obj)
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/stack_data/core.py", line 628, in executing_piece
-    return only(
-  File "/Users/andrexiao/anaconda3/envs/ml-0451/lib/python3.9/site-packages/executing/executing.py", line 164, in only
-    raise NotOneValueFound('Expected one value, found 0')
-executing.executing.NotOneValueFound: Expected one value, found 0</code></pre>
+<div id="cell-15" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>LR4 <span class="op">=</span> LogisticRegression()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>loss_vec_newton <span class="op">=</span> train_newton(LR4, X, y, alpha <span class="op">=</span> <span class="dv">20</span>, iters <span class="op">=</span> <span class="dv">45</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec_newton)<span class="op">+</span><span class="dv">1</span>), loss_vec_newton, color <span class="op">=</span> <span class="st">"green"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.semilogx()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Iterations"</span>, ylabel <span class="op">=</span> <span class="st">"Loss (Binary Cross Entropy)"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="newton_post_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<p>As we can see, Newton’s method fails to converge when <span class="math inline">\(\alpha\)</span> is much greater than the number of data points and we get exceptions. This is because, <span class="math inline">\(H(\mathbf(w))^{-1}\)</span> results in extremely large absolute values, which, when multiplied by a high <span class="math inline">\(alpha\)</span>, are incorporated into the weights. As a result, the weights increase significantly with each iteration. This leads to exceedingly high scores, which then become extremely low when calculating <span class="math inline">\(\log(1-\sigma(s))\)</span> which are then interpreted as negative infinity. Running calculations with these <code>-inf</code> values ultimately results in <code>NaNs</code>.</p>
+</div>
+<p>As we can see, Newton’s method fails to converge when <span class="math inline">\(\alpha\)</span> is much greater than the number of data points. The loss begins to drastically increase around 40 iterations. This is because, the algorithm overshoots the minima. Each iteration, the algorithm overshoots the minima more and more due to the large <span class="math inline">\(\alpha\)</span> causing the loss to grow faster each iteration.</p>
 </section>
 </section>
 <section id="operation-counting" class="level2" data-number="4">
